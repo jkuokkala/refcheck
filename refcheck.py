@@ -165,6 +165,7 @@ else:
                 auths_j = auths_j + ' ' + year
             print('Citation "%s" not found in references list' %(auths_j) )
     
+    # posscits to be checked too...
 
 #print('#cits: ', repr(cits)) ### DEBUG
 #print('#refs: ', repr(refs)) ### DEBUG
