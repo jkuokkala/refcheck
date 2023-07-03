@@ -30,11 +30,12 @@ for line in sys.stdin:
     if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus)\s*$', line):
         in_refs = True
     if in_refs:
-        m = re.match(r'\s*((?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?)+)?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\)))\.', line)
+        m = re.match(r'\s*((?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\)))\.', line)
         if m:
             auths = m.group(1)
             year = m.group(2)
             if auths:
+                auths = re.sub(r'\s+\([^)]+\)', '', auths)
                 auths = re.split(r'\s+\&\s+', auths)
                 auths = [ re.split(r',\s*', a) for a in auths ]
             if year:
