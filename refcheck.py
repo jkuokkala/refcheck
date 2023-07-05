@@ -30,7 +30,55 @@ for line in sys.stdin:
     if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
         in_refs = True
     if in_refs:
-        m = re.match(r'\s*((?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\)))\.', line)
+        m = re.match(r'''
+                \s*
+                (
+                    (?:
+                        (?:[^,.=]+)
+                        (?:
+                            ,
+                            (?:
+                                \s+
+                                [^.=]+\b\.?[\])]?
+                            )+
+                        )?
+                    )
+                    (?:
+                        \s+\&\s+
+                        (?:
+                            (?:[^,.=]+)
+                            (?:
+                                ,
+                                (?:
+                                    \s+
+                                    [^.=]+\b\.?[\])]?
+                                )+
+                            )?
+                        )
+                    )*
+                )
+                \.\s*
+                (
+                    (?:
+                        [12][0-9]{3}
+                        (?:
+                            [–-][0-9]+
+                        )?
+                        [a-z]?
+                        (?:
+                            \s+
+                            \[
+                            [12][0-9]{3}
+                            (?:
+                                [–-][0-9]+
+                            )?
+                            \]
+                        )?
+                        |\([^)]+\)
+                    )
+                )
+                \.
+                ''', line, flags=re.VERBOSE)
         if m:
             auths = m.group(1)
             year = m.group(2)
@@ -61,7 +109,8 @@ for line in sys.stdin:
                     refs[auths[0][0]].append( (auths, year) )
                     #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
     else:
-        for citcand in re.findall(r'''\b
+        for citcand in re.findall(r'''
+                \b
                 (
                    (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?
                    (?:[A-ZÅÄÖÜĈŠŽ]\.\s+)?
@@ -78,8 +127,18 @@ for line in sys.stdin:
                             [12][0-9]{3}
                             (?:
                                 [–-][0-9]+
-                            )
-                            ?[a-z]?|
+                            )?
+                            [a-z]?
+                            (?:
+                                \s+
+                                \[
+                                [12][0-9]{3}
+                                (?:
+                                    [–-][0-9]+
+                                )?
+                                \]
+                            )?
+                            |
                             (?:
                                 \(?
                                 (?:
@@ -88,7 +147,7 @@ for line in sys.stdin:
                                 \)?
                             )
                         )
-                        \b
+                        (?<=\w|\])(?!\w)
                         (?:
                             \s*:\s*[0-9]+
                             (?:
