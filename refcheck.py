@@ -27,7 +27,7 @@ refs = defaultdict(list)  # dict key = first author / title abbreviation, value 
 in_refs = False
 
 for line in sys.stdin:
-    if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus)\s*$', line):
+    if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
         in_refs = True
     if in_refs:
         m = re.match(r'\s*((?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,(?:\s+[^.=]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\)))\.', line)
