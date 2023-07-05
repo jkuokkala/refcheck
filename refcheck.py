@@ -7,6 +7,8 @@
 # (https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/).
 # Quite a rudimentary tool for the time being but pretty handy for finding the most obvious missing references.
 #
+# NB. Citations withoout year are only recognized if a page reference is included, e.g. "IEW: 123" but not "IEW".
+#
 # Input text (stdin) should be first converted into UTF-8 plain text.
 #
 # Author: juha.kuokkala@helsinki.fi (2023)
@@ -112,15 +114,18 @@ for line in sys.stdin:
         for citcand in re.findall(r'''
                 \b
                 (
-                   (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?
-                   (?:[A-ZÅÄÖÜĈŠŽ]\.\s+)?
-                   [A-ZÅÄÖÜĈŠŽ]\S+
-                   (?:\s+(?:et\ al\.?|ym\.?)
-                   |(?:\s+\&\s+[A-ZÅÄÖÜĈŠŽ]\S+)+)?
+                    (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?
+                    (?:[A-ZÅÄÖÜĈŠŽ]\.\s+)?
+                    [A-ZÅÄÖÜĈŠŽ]\S+
+                    (?:
+                        \s+(?:et\ al\.?|ym\.?)
+                        |
+                        (?:\s+\&\s+[A-ZÅÄÖÜĈŠŽ]\S+)+
+                    )?
                 )
                 (?:['’]s)?
-                \s+
                 (
+                    \s+
                     (?:
                         \(?
                         (?:
@@ -149,7 +154,8 @@ for line in sys.stdin:
                         )
                         (?<=\w|\])(?!\w)
                         (?:
-                            \s*:\s*[0-9]+
+                            \s*:\s*
+                            [0-9]+
                             (?:
                                 [ ,–-]+[0-9]+
                             )*
@@ -158,21 +164,21 @@ for line in sys.stdin:
                             ;\s+
                         )?
                     )+
-                    |(?:
-                        :
+                    |
+                    (?:
+                        \s*:\s*
+                        [0-9]+
                         (?:
-                            \s*:\s*[0-9]+
-                            (?:
-                                [ ,–-]+[0-9]+
-                            )*
-                        )?
+                            [ ,–-]+[0-9]+
+                        )*
                         (?:
                             ;\s+
                         )?
                     )
                 )''', line, flags=re.VERBOSE):
+            #print('#CITCAND: ', repr(citcand)) ### DEBUG
             auths = citcand[0]
-            auths = re.sub(r'[\'’´]s$', '', auths)
+            #auths = re.sub(r'[\'’´]s$', '', auths)
             auths = re.split(r'\s+\&\s+', auths)
             for i in range(len(auths)):
                 m = re.match(r'((?:[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.\s*)+)(.*)', auths[i])
@@ -195,7 +201,7 @@ for line in sys.stdin:
 if not in_refs:
     print('# ERROR: No references list found (abnormally named section heading?)')
 else:
-    for auths, year in sorted(cits):
+    for auths, year in sorted(cits) + sorted(posscits):
         found = False
         firstauth = auths[0]
         if firstauth[0] in refs:
