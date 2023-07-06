@@ -43,7 +43,7 @@ def check_references(input, lang='en'):
     for line in input:
         if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
             in_refs = True
-        elif in_refs and re.match(r'(Appendix|Liite)\b', line):
+        elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
             in_refs = False
         if in_refs:
             m = re.match(r'''
