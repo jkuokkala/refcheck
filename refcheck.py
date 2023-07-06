@@ -22,8 +22,8 @@ sys.stdin.reconfigure(encoding='utf-8')
 sys.stdout.reconfigure(encoding='utf-8')
 
 
-cits = list()  #  in-text citations
-posscits = list()  # possible citations (with no year)
+cits = list()  #  in-text citations (with year and/or page numbers)
+posscits = set()  # possible citations (words that look like reference abbreviations etc.)
 refs = defaultdict(list)  # dict key = first author / title abbreviation, value contains a list of corresponding ref. list items
 uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
 
@@ -119,6 +119,9 @@ for line in sys.stdin:
                     uncited.add(refitem)
                     #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
     else:
+        # Collect a list of possible yearless, pageless citations for final checking
+        posscits.update( re.findall(r'\b([A-ZÅÄÖÜĈŠŽ]\S*[A-ZÅÄÖÜĈŠŽ]\S*)\b(?!\s*(?::|s\.\s*\.v|[0-9]{4}))', line) )
+        # Find formally clear citations
         for citcand in re.findall(r'''
                 \b
                 (
@@ -126,7 +129,7 @@ for line in sys.stdin:
                     (?:[A-ZÅÄÖÜĈŠŽ]\.\s+)?
                     [A-ZÅÄÖÜĈŠŽ]\S+?
                     (?:
-                        \s+(?:et\ al\.?|ym\.?)
+                        \s+(?:et\ al\.?|ym\.?|jt\.?)
                     |
                         (?:\s+\&\s+[A-ZÅÄÖÜĈŠŽ]\S+?)+
                     )?
@@ -205,8 +208,8 @@ for line in sys.stdin:
                 m = re.match(r'((?:[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.\s*)+)(.*)', auths[i])
                 if m:
                     auths[i] = [ m.group(2), m.group(1).strip() ]
-                elif re.search(r'\s+(?:et\s+al\.|ym\.|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i]):
-                    auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i])
+                elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i]):
+                    auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i])
                 else:
                     auths[i] = [ auths[i] ]
             years = re.findall(r'(?:^\s*|;\s*|\s*\()([^;:,.()]*\w[^;:,.()]+)', citcand[1])
@@ -216,19 +219,17 @@ for line in sys.stdin:
                     cits.append( (auths, year) )
                     #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
             else:
-                posscits.append( (auths, None) )
+                cits.append( (auths, None) )
                 #print('#ADD: ', repr(auths), None) ### DEBUG
-                # TODO: posscits:iin oli kai oikeastaan tarkoitus listata vuosiluvuttuomat, sivunumerottomat
-                # mahdolliset viitteet, joita voi käyttää lähdeluettelon viitteiden olemassaolotsekkaukseen.
             
 if not refs:
     print('# ERROR: No references list found (abnormally named section heading?)')
 else:
-    for auths, year in sorted(cits) + sorted(posscits):
+    for auths, year in sorted(cits):
         found = False
         firstauth = auths[0]
         if firstauth[0] in refs:
-            if re.match(r'(et\ al\.?|ym\.?)$', firstauth[-1]):
+            if re.match(r'(et\ al\.?|ym\.?|jt\.?)$', firstauth[-1]):
                 for ref in refs[firstauth[0]]:
                     if len(ref[0]) > 1 and ref[1] == year:
                         found = True
@@ -259,14 +260,17 @@ else:
             print('Citation "%s" not found in references list' %(auths_j) )
 
     for auths, year in uncited:
-        # TODO: yearless, pageless possible citations to be checked here
+        if not year and len(auths) == 1 and len(auths[0]) == 1:
+            if auths[0][0] in posscits:
+                continue
         auths_j = ' & '.join([ names[0] for names in auths ])
         if year:
             auths_j = auths_j + ' ' + year
         print('References list item "%s" not cited in text' %(auths_j) )
             
 
-print('#cits: ', repr(cits)) ### DEBUG
-print('#refs: ', repr(refs)) ### DEBUG
-print('#uncited: ', repr(uncited)) ### DEBUG
+#print('#cits: ', repr(cits)) ### DEBUG
+#print('#refs: ', repr(refs)) ### DEBUG
+#print('#uncited: ', repr(uncited)) ### DEBUG
+#print('#posscits: ', repr(posscits)) ### DEBUG
 
