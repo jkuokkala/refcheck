@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 #
-# Cross-checking utility for in-text citations and reference literature list within one document.
-# Works with the "Generic Style Rules for Linguistics" style
+# Cross-checking utility for in-text citations and reference list within one document.
+# Works currently with the "Generic Style Rules for Linguistics" style
 # (https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/).
 # Quite a rudimentary tool for the time being but pretty handy for finding the most obvious missing references.
 #
@@ -25,6 +25,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 cits = list()  #  in-text citations
 posscits = list()  # possible citations (with no year)
 refs = defaultdict(list)  # dict key = first author / title abbreviation, value contains a list of corresponding ref. list items
+uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
 
 in_refs = False
 
@@ -90,10 +91,12 @@ for line in sys.stdin:
             if auths:
                 auths = re.sub(r'\s+\([^)]+\)', '', auths)
                 auths = re.split(r'\s+\&\s+', auths)
-                auths = [ re.split(r',\s*', a) for a in auths ]
+                auths = tuple([ tuple(re.split(r',\s*', a)) for a in auths ])
             if year:
                 year = year.strip('()')
-            refs[auths[0][0]].append( (auths, year) )
+            refitem = (auths, year)
+            refs[auths[0][0]].append(refitem)
+            uncited.add(refitem)
             #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
         else:
             m = re.match(r'\s*([^.=]+)\s+=\s+', line)
@@ -108,10 +111,12 @@ for line in sys.stdin:
                         auths = auths[:-(len(year)+1)]
                     if auths:
                         auths = re.split(r'\s+\&\s+', auths)
-                        auths = [ re.split(r',\s*', a, maxsplit=1) for a in auths ]
+                        auths = tuple([ tuple(re.split(r',\s*', a, maxsplit=1)) for a in auths ])
                     if year:
                         year = year.strip('()')
-                    refs[auths[0][0]].append( (auths, year) )
+                    refitem = (auths, year)
+                    refs[auths[0][0]].append(refitem)
+                    uncited.add(refitem)
                     #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
     else:
         for citcand in re.findall(r'''
@@ -213,8 +218,10 @@ for line in sys.stdin:
             else:
                 posscits.append( (auths, None) )
                 #print('#ADD: ', repr(auths), None) ### DEBUG
+                # TODO: posscits:iin oli kai oikeastaan tarkoitus listata vuosiluvuttuomat, sivunumerottomat
+                # mahdolliset viitteet, joita voi käyttää lähdeluettelon viitteiden olemassaolotsekkaukseen.
             
-if not in_refs:
+if not refs:
     print('# ERROR: No references list found (abnormally named section heading?)')
 else:
     for auths, year in sorted(cits) + sorted(posscits):
@@ -225,6 +232,7 @@ else:
                 for ref in refs[firstauth[0]]:
                     if len(ref[0]) > 1 and ref[1] == year:
                         found = True
+                        uncited.discard(ref)
                         break
             elif firstauth[-1].endswith('.'):
                 gname_pref = firstauth[-1][:-1]
@@ -232,6 +240,7 @@ else:
                     refauth = ref[0][0]
                     if len(refauth) > 1 and refauth[1].startswith(gname_pref) and ref[1] == year:
                         found = True
+                        uncited.discard(ref)
                         break
             else:
                 auths_fam = [ a[0] for a in auths ]
@@ -241,15 +250,23 @@ else:
                     #print('#refauths_fam, ref[1]: ', repr(refauths_fam), repr(ref[1])) ### DEBUG
                     if refauths_fam == auths_fam and ref[1] == year:
                         found = True
+                        uncited.discard(ref)
                         break
         if not found:
             auths_j = ' & '.join([ ' '.join(names) for names in auths ])
             if year:
                 auths_j = auths_j + ' ' + year
             print('Citation "%s" not found in references list' %(auths_j) )
-    
-    # posscits to be checked too...
 
-#print('#cits: ', repr(cits)) ### DEBUG
-#print('#refs: ', repr(refs)) ### DEBUG
+    for auths, year in uncited:
+        # TODO: yearless, pageless possible citations to be checked here
+        auths_j = ' & '.join([ names[0] for names in auths ])
+        if year:
+            auths_j = auths_j + ' ' + year
+        print('References list item "%s" not cited in text' %(auths_j) )
+            
+
+print('#cits: ', repr(cits)) ### DEBUG
+print('#refs: ', repr(refs)) ### DEBUG
+print('#uncited: ', repr(uncited)) ### DEBUG
 
