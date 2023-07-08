@@ -101,7 +101,7 @@ def check_references(input, lang='en'):
                 year = m.group(2)
                 if auths:
                     auths = re.sub(r'\s+\([^)]+\)', '', auths)
-                    auths = re.split(r'\s+\&\s+', auths)
+                    auths = re.split(r'\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?)', auths)
                     auths = tuple([ tuple(re.split(r',\s*', a)) for a in auths ])
                 if year:
                     year = year.strip('()')
