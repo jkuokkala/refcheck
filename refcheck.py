@@ -131,18 +131,18 @@ def check_references(input, lang='en'):
                         #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
         else:
             # Collect a list of possible yearless, pageless citations for final checking
-            posscits.update( re.findall(r'\b([A-ZÅÄÖÜĈŠŽ]\S*[A-ZÅÄÖÜĈŠŽ]\S*)\b(?!\s*(?::|s\.\s*\.v|[0-9]{4}))', line) )
+            posscits.update( re.findall(r'\b([A-ZÅÄÖÜČŠŽ]\S*[A-ZÅÄÖÜČŠŽ]\S*)\b(?!\s*(?::|s\.\s*\.v|[0-9]{4}))', line) )
             # Find formally clear citations
             for citcand in re.findall(r'''
                     \b
                     (
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?
-                        (?:[A-ZÅÄÖÜĈŠŽ]\.\s+)?
-                        [A-ZÅÄÖÜĈŠŽ]\S+?
+                        (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?
+                        [A-ZÅÄÖÜČŠŽ]\S+?
                         (?:
                             \s+(?:et\ al\.?|ym\.?|jt\.?)
                         |
-                            (?:\s+\&\s+[A-ZÅÄÖÜĈŠŽ]\S+?)+
+                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+
                         )?
                     )
                     (?:['’]s)?
@@ -216,11 +216,11 @@ def check_references(input, lang='en'):
                 #auths = re.sub(r'[\'’´]s$', '', auths)
                 auths = re.split(r'\s+\&\s+', auths)
                 for i in range(len(auths)):
-                    m = re.match(r'((?:[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.\s*)+)(.*)', auths[i])
+                    m = re.match(r'((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)', auths[i])
                     if m:
                         auths[i] = [ m.group(2), m.group(1).strip() ]
-                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i]):
-                        auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüĉšž]*\.)', auths[i])
+                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüčšž]*\.)', auths[i]):
+                        auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)', auths[i])
                     else:
                         auths[i] = [ auths[i] ]
                 years = re.findall(r'(?:^\s*|;\s*|\s*\()([^;:,.()]*\w[^;:,.()]+)', citcand[1])
