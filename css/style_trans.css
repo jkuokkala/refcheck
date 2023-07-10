@@ -1,0 +1,163 @@
+
+body {
+	/* font-family: 'Open Sans', Helvetica, Arial, sans-serif; */
+    font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	overflow-x: hidden;
+	text-align:center;
+}
+
+.maincontent {
+	margin: 6em;
+}
+
+tr {
+	border-width: 1px;
+	border-spacing: 1px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse
+}
+
+table {
+	width: 80%;	
+	border-width: 1px;
+	border-spacing: 1px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table.transform {
+	border: none;
+}
+
+table.transform tr {
+	border: none;
+}
+
+td, th, img {
+	padding: 5px
+}
+
+td.with_border {
+	border-right: 1px solid;
+}
+
+td.strong_border_right {
+	border-right: 3px solid;
+}
+
+td.strong_border_bottom {
+	border-bottom: 3px solid;
+}
+
+td.strong_border_tl {
+	border-right: 3px solid;	
+	border-bottom: 3px solid;
+}
+
+textarea {
+	width: 100%;
+	height: 100%;
+	position:relative;
+}
+
+table.options {
+	border-width: 1px;
+	border-spacing: 2px;
+	border-style: hidden;
+	border-color: white;
+	border-collapse: collapse
+}
+
+td.options {
+
+	text-align:center;
+	border-width: 1px;
+	padding: 5px;
+	border-style: hidden;
+	border-color: black;
+	-moz-border-radius: ;
+}
+
+div.trans {
+	display: fixed;
+	min-height: 500px;
+	max-height: 500px;
+	text-align:left;
+	overflow: auto
+}
+
+
+
+.cop-section { margin-bottom: 60px; }
+
+.form-control {
+	width: 80%;
+	border-color: #0a6697;
+	border-radius: 0;
+	color: #4286ab;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	font-size: 1.3rem;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.cop-button {
+	background-color: #120D9A;
+	border: none;
+	color: white;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1.4rem;	
+	padding: 18px 35px;
+}
+
+.cop-button-wide { padding: 18px 40px; }
+
+.cop-button:hover,
+.cop-button:active,
+.cop-button:focus {
+	background-color: #A5DAFA;
+	color: white;
+}
+
+.cop-blue-text {	color: #120D9A; }
+.cop-section-title {	font-size: 1.8rem; text-align: center;}
+.cop-margin-b-45 { margin-bottom: 45px; }
+.cop-margin-b-30 { margin-bottom: 30px; }
+
+
+.bigbutton {
+	background-color: #120D9A;
+	border: none;
+	color: white;
+	cursor: pointer;
+	font-size: 3rem;	
+}
+
+.bigbutton:hover,
+.bigbutton:active,
+.bigbutton:focus {
+	background-color: #A5DAFA;
+	color: white;
+}
+
+.heading-note {
+	font-style: italic;
+}
+
+.input-heading {
+	font-size: 1.4rem;	
+	color: #120D9A; 
+}
+
+.proc-warnings {
+	color: #120D9A; 
+	margin-bottom: 10px;
+}
+
