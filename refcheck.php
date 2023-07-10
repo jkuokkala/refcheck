@@ -1,3 +1,29 @@
+<?php
+header("Content-type: text/html; charset=utf-8");
+
+$lang = "";
+$content = "";
+$addcontent = "";
+
+if (isset($_GET['lang'])) {
+	$lang = $_GET['lang'];
+} elseif (isset($_POST["lang"])) {
+	$lang = $_POST["lang"];
+} elseif (isset($_COOKIE["lang"])) {
+	$lang = $_COOKIE["lang"];
+}
+if (!in_array($lang, ['en','fi'])) {
+	$lang = "fi";
+}
+setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiretion time 5y
+
+if (isset($_POST["content"])) {
+	$content = $_POST["content"];
+}
+if (isset($_POST["addcontent"])) {
+	$addcontent = $_POST["addcontent"];
+}
+?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
 <!-- Version 0.1, 2023-07-10 -->
 <!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
@@ -40,35 +66,8 @@ $UISTR = array(
     'result_head_nok_fi' => 'Joitakin ongelmia löytyi (osa voi johtua työkalun virheellisesti lähdeviitteiksi tulkitsemista sanoista tms.):',
 );
 
-header("Content-type: text/html; charset=utf-8");
-
 include('refcheck_func.php');
 
-$lang = "x";
-$content = "";
-$addcontent = "";
-
-if (isset($_GET['l']))
-{
-	$lang = $_GET['l'];
-}
-elseif (isset($_POST["lang"]))
-{
-	$lang = $_POST["lang"];
-}
-if (!in_array($lang, ['en','fi']))
-{
-	$lang = "fi";
-}
-
-if (isset($_POST["content"]))
-{
-	$content = $_POST["content"];
-}
-if (isset($_POST["addcontent"]))
-{
-	$addcontent = $_POST["addcontent"];
-}
 
 echo "<div class=\"maincontent\">\n";
 
