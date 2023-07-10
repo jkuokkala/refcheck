@@ -151,6 +151,11 @@ div.trans {
 	font-style: italic;
 }
 
+.ref-form {
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+
 .input-heading {
 	font-size: 1.4rem;	
 	color: #120D9A; 
@@ -161,3 +166,15 @@ div.trans {
 	margin-bottom: 10px;
 }
 
+.result-head-ok {
+	background-color: #e8ffe8;
+	font-weight: 600;
+}
+.result-head-nok {
+	background-color: #ffe8e8;
+	font-weight: 600;
+}
+
+@media screen and (max-width: 700px) {
+	.maincontent { margin: 2em; }
+}

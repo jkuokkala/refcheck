@@ -56,13 +56,10 @@ echo "<div class=\"heading-note\"> Currently only supports the <a href=\"https:/
 </div>";
 echo "<hr>";
 
-echo "<form action=\"?l=$lang\" method=\"post\">\n";
-
-// echo "<div width=\"90%\">\";
-echo"<div class=\"input-heading\">Paste your document text here, including References list:</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
-echo"<div class=\"input-heading\">Footnotes and other additional text with citations can be pasted here:</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
+echo "<form class=\"ref-form\" action=\"?l=$lang\" method=\"post\">\n";
+echo "<div class=\"input-heading\">Paste your document text here, including References list:</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
+echo "<div class=\"input-heading\">Footnotes and other additional text with citations can be pasted here:</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
 echo "<button type=\"submit\" class=\"cop-button cop-button-wide\">Check Citations vs. References List</button>\n";
-// echo "</div>";
 echo "</form><hr>\n";
 
 if ($content != "")
@@ -75,12 +72,11 @@ if ($content != "")
 	
 	if (empty($output))
 	{
-		echo "<div class=\"trans\"><b>All references seem to be OK! :)</b></div>\n<hr>\n";
+		echo "<div class=\"result-head-ok\">All references seem to be OK! ☺️</div>\n<hr>\n";
 	}
 	else
 	{
-		// $output = str_replace("\n", "<br/>", $output);
-		echo "<div><b>Some problems were found:</b></div>\n<hr>\n";
+		echo "<div class=\"result-head-nok\">Some problems were found:</div>\n<hr>\n";
 		echo "<div class=\"trans\">\n";
 		foreach ($output as $outline) {
 			echo "<div>$outline</div>\n";
