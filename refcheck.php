@@ -23,6 +23,23 @@
 
 <?php
 
+$UISTR = array(
+    'main_heading_en' => 'RefCheck – Cross-checking utility for in-text citations and references list within one document',
+    'main_heading_fi' => 'RefCheck – Lähdeviitteiden ja lähdeluettelon ristiintarkastustyökalu',
+    'main_heading_note_en' => 'Currently only supports the <a href=\"https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/\">Generic Style Rules for Linguistics</a> and similar enough stylesheets.',
+    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href=\"https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/\">Generic Style Rules for Linguistics</a> -tyyliä ja muita samaa lähdeviitemuotoilua käyttäviä tyylejä.',
+    'input_heading_en' => 'Paste your document text here, including References list:',
+    'input_heading_fi' => 'Kopioi tähän dokumenttisi teksti, sisältäen lähdeluettelon:',
+    'add_input_heading_en' => 'Footnotes and other additional text with citations can be pasted here:',
+    'add_input_heading_fi' => 'Tähän voi kopioida alaviitteet ja muut erilliset lähdeviitteitä sisältävät tekstinosat:',
+    'submit_button_en' => 'Check Citations against References List',
+    'submit_button_fi' => 'Tarkasta lähdeviitteiden ja -luettelon yhtäpitävyys',
+    'result_head_ok_en' => 'All references seem to be OK! :)️',
+    'result_head_ok_fi' => 'Kaikki viittaukset näyttäisivät olevan kunnossa! :)️',
+    'result_head_nok_en' => 'Some problems were found (NB: the tool may incorrectly interpret some words followed by colon as citations):',
+    'result_head_nok_fi' => 'Joitakin ongelmia löytyi (osa voi johtua työkalun virheellisesti lähdeviitteiksi tulkitsemista sanoista tms.):',
+);
+
 header("Content-type: text/html; charset=utf-8");
 
 include('refcheck_func.php');
@@ -35,9 +52,13 @@ if (isset($_GET['l']))
 {
 	$lang = $_GET['l'];
 }
-else
+elseif (isset($_POST["lang"]))
 {
-	$lang = "en";
+	$lang = $_POST["lang"];
+}
+if (!in_array($lang, ['en','fi']))
+{
+	$lang = "fi";
 }
 
 if (isset($_POST["content"]))
@@ -51,15 +72,26 @@ if (isset($_POST["addcontent"]))
 
 echo "<div class=\"maincontent\">\n";
 
-echo "<h2  class=\"cop-blue-text cop-section-title cop-margin-b-45\">RefCheck – Cross-checking utility for in-text citations and references list within one document</h2>\n";
-echo "<div class=\"heading-note\"> Currently only supports the <a href=\"https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/\">Generic Style Rules for Linguistics</a> and similar enough stylesheets.
-</div>";
-echo "<hr>";
+echo "<form action=\"#res\" method=\"post\">\n";
 
-echo "<form class=\"ref-form\" action=\"?l=$lang\" method=\"post\">\n";
-echo "<div class=\"input-heading\">Paste your document text here, including References list:</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
-echo "<div class=\"input-heading\">Footnotes and other additional text with citations can be pasted here:</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
-echo "<button type=\"submit\" class=\"cop-button cop-button-wide\">Check Citations vs. References List</button>\n";
+echo "<div class=\"lang-select\">\n";
+echo "<label for=\"lang\">Language:</label>\n";
+echo "<select name=\"lang\" id=\"lang\" onchange=\"this.form.submit()\">";
+echo "<option value=\"en\"" . ($lang == 'en' ? " selected" : "") . ">English</option>";
+echo "<option value=\"fi\"" . ($lang == 'fi' ? " selected" : "") . ">Suomi</option>";
+echo "</select>\n";
+echo "</div>\n";
+
+
+echo "<h2  class=\"cop-blue-text cop-section-title cop-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
+echo "<hr>\n";
+
+echo "<div class=\"ref-form\">\n";
+echo "<div class=\"input-heading\">{$UISTR['input_heading_'.$lang]}</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
+echo "<div class=\"input-heading\">{$UISTR['add_input_heading_'.$lang]}</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
+echo "<button type=\"submit\" class=\"cop-button cop-button-wide\">{$UISTR['submit_button_'.$lang]}</button>\n";
+echo "</div>\n";
 echo "</form><hr>\n";
 
 if ($content != "")
@@ -72,11 +104,11 @@ if ($content != "")
 	
 	if (empty($output))
 	{
-		echo "<div class=\"result-head-ok\">All references seem to be OK! ☺️</div>\n<hr>\n";
+		echo "<div id=\"res\" class=\"result-head-ok\">{$UISTR['result_head_ok_'.$lang]}</div>\n<hr>\n";
 	}
 	else
 	{
-		echo "<div class=\"result-head-nok\">Some problems were found:</div>\n<hr>\n";
+		echo "<div id=\"res\" class=\"result-head-nok\">{$UISTR['result_head_nok_'.$lang]}</div>\n<hr>\n";
 		echo "<div class=\"trans\">\n";
 		foreach ($output as $outline) {
 			echo "<div>$outline</div>\n";
@@ -89,10 +121,6 @@ if ($content != "")
 echo "</div>";
 
 ?> 
-
-
-
-
 
 
 </body>

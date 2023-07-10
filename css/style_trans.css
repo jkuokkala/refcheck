@@ -9,7 +9,7 @@ body {
 }
 
 .maincontent {
-	margin: 6em;
+	margin: 2rem 12rem;
 }
 
 tr {
@@ -127,7 +127,11 @@ div.trans {
 }
 
 .cop-blue-text {	color: #120D9A; }
-.cop-section-title {	font-size: 1.8rem; text-align: center;}
+.cop-section-title {
+	font-size: 1.8rem;
+	text-align: center;
+	margin-top: 4rem;
+}
 .cop-margin-b-45 { margin-bottom: 45px; }
 .cop-margin-b-30 { margin-bottom: 30px; }
 
@@ -145,6 +149,10 @@ div.trans {
 .bigbutton:focus {
 	background-color: #A5DAFA;
 	color: white;
+}
+
+.lang-select {
+	text-align: right;
 }
 
 .heading-note {
@@ -175,6 +183,11 @@ div.trans {
 	font-weight: 600;
 }
 
-@media screen and (max-width: 700px) {
-	.maincontent { margin: 2em; }
+@media screen and (max-width: 1200px) {
+	.maincontent { margin: 2rem 8rem; }
+	.cop-section-title { margin-top: 4rem; }
+}
+@media screen and (max-width: 800px) {
+	.maincontent { margin: 2rem 4rem; }
+	.cop-section-title { margin-top: 2rem; }
 }
