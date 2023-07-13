@@ -113,7 +113,7 @@ function check_references($input, $lang = 'en') {
 				$years = array_map('trim', $years[1]);
 				if (!empty($years)) {
 					foreach ($years as $year) {
-                        if (preg_match('/^[12][0-9]{3}\b/u', $year)) {
+                        if (! preg_match('/^[0-9IVX]{1,3}\b/u', $year)) {
 							$cits[] = array($auths, $year);
 							#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 						}

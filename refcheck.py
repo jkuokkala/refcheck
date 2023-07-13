@@ -225,7 +225,7 @@ def check_references(input, lang='en'):
                 years = [ y.strip() for y in years]
                 if years:
                     for year in years:
-                        if re.match(r'[12][0-9]{3}\b', year):
+                        if not re.match(r'[0-9IVX]{1,3}\b', year):
                             cits.append( (auths, year) )
                         #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
                 else:
