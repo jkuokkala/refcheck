@@ -138,11 +138,11 @@ def check_references(input, lang='en'):
                     (
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
                         (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
-                        [A-ZÅÄÖÜČŠŽ]\S+?                                   # Surname / Referenc title
+                        [A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?                            # Surname / Reference title
                         (?:
                             \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
                         |
-                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+  # & More & Authors ?
+                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?)+  # & More & Authors ?
                         )?
                     )
                     (?:['’]s)?   # Author's ?
@@ -189,6 +189,7 @@ def check_references(input, lang='en'):
                     |
                         (?:
                             \s*\(?
+                            (?:[0-9]{1,2}|[IVX]+)   # reference work volume number ?
                             (?:
                                 :\s*                # Colon
                                 [0-9IVXivx]+        # Page numbers
@@ -224,7 +225,8 @@ def check_references(input, lang='en'):
                 years = [ y.strip() for y in years]
                 if years:
                     for year in years:
-                        cits.append( (auths, year) )
+                        if re.match(r'[12][0-9]{3}\b', year):
+                            cits.append( (auths, year) )
                         #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
                 else:
                     cits.append( (auths, '') )
