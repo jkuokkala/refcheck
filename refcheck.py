@@ -189,7 +189,7 @@ def check_references(input, lang='en'):
                     |
                         (?:
                             \s*\(?
-                            (?:[0-9]{1,2}|[IVX]+)   # reference work volume number ?
+                            (?:[0-9]{1,2}|[IVX]+)?  # reference work volume number ?
                             (?:
                                 :\s*                # Colon
                                 [0-9IVXivx]+        # Page numbers
