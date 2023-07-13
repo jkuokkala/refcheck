@@ -124,7 +124,7 @@ function check_references($input, $lang = 'en') {
 		}			
 	}
 
-    echo "<br/>\n<b>#uncited (init.):</b> ", var_dump($uncited); ### DEBUG
+    #echo "<br/>\n<b>#uncited (init.):</b> ", var_dump($uncited); ### DEBUG
 	// $uncited = array_unique($uncited);
 	$errlist = [];
 	if (empty($refs)) {
@@ -178,6 +178,7 @@ function check_references($input, $lang = 'en') {
 			}
 		}
 	}
+	ksort($uncited);
 	foreach ($uncited as [$auths, $year]) {
 		if (!$year && count($auths) == 1 && count($auths[0]) == 1) {
 			if (in_array($auths[0][0], $posscits)) {

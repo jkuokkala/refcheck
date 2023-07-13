@@ -272,7 +272,7 @@ def check_references(input, lang='en'):
                     auths_j = auths_j + ' ' + year
                 errlist.append(ERRSTR['citation_missing_in_reflist_'+lang] %(auths_j) )
 
-        for auths, year in uncited:
+        for auths, year in sorted(uncited):
             if not year and len(auths) == 1 and len(auths[0]) == 1:
                 if auths[0][0] in posscits:
                     continue
