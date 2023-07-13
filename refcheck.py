@@ -136,30 +136,30 @@ def check_references(input, lang='en'):
             for citcand in re.findall(r'''
                     \b
                     (
-                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?
-                        (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?
-                        [A-ZÅÄÖÜČŠŽ]\S+?
+                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
+                        (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
+                        [A-ZÅÄÖÜČŠŽ]\S+?                                   # Surname / Referenc title
                         (?:
-                            \s+(?:et\ al\.?|ym\.?|jt\.?)
+                            \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
                         |
-                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+
+                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+  # & More & Authors ?
                         )?
                     )
-                    (?:['’]s)?
+                    (?:['’]s)?   # Author's ?
                     (
                         \s+
                         (?:
                             \(?
                             (?:
-                                [12][0-9]{3}
+                                [12][0-9]{3}        # Year
                                 (?:
-                                    [–-][0-9]+
+                                    [–-][0-9]+      # span ?
                                 )?
-                                [a-z]?
+                                [a-z]?              # 2000a ?
                                 (?:
                                     \s+
                                     \[
-                                    [12][0-9]{3}
+                                    [12][0-9]{3}    # [original_year] ?
                                     (?:
                                         [–-][0-9]+
                                     )?
@@ -174,12 +174,12 @@ def check_references(input, lang='en'):
                                     \)?
                                 )
                             )
-                            (?<=\w|\])(?!\w)
+                            (?<=\w|\])(?!\w)        # End of word or closing bracket
                             (?:
-                                \s*:\s*
-                                [0-9]+
+                                :\s*                # Colon
+                                [0-9IVXivx]+        # Page numbers
                                 (?:
-                                    [ ,–-]+[0-9]+
+                                    [ ,–-]+[0-9IVXivx]+
                                 )*
                             )?
                             (?:
@@ -190,20 +190,17 @@ def check_references(input, lang='en'):
                         (?:
                             \s*\(?
                             (?:
-                                \s*:\s*
-                                [0-9]+
+                                :\s*                # Colon
+                                [0-9IVXivx]+        # Page numbers
                                 (?:
-                                    [ ,–-]+[0-9]+
+                                    [ ,–-]+[0-9IVXivx]+
                                 )*
                             |
+                                :?                  # Colon ?
+                                \s*s\.\s*v\.\s*     # s.v.
+                                [A-῾*-]+            # Word consisting of letters (asterisks or hyphens can be included)
                                 (?:
-                                    \s*:\s*
-                                |
-                                    \s*s\.\s*v\.\s*
-                                ){1,2}
-                                [A-῾*-]+
-                                (?:
-                                    [ ,–-]+[A-῾*-]+
+                                    [ ,–-]+[A-῾*-]+ # More words ?
                                 )*
                             )
                             (?:

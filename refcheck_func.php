@@ -96,7 +96,7 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ]\S+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?:\s*:\s*[0-9]+(?:[ ,–-]+[0-9]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:\s*:\s*[0-9]+(?:[ ,–-]+[0-9]+)*|(?:\s*:\s*|\s*s\.\s*v\.\s*){1,2}[A-῾*-]+(?:[ ,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ]\S+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-῾*-]+(?:[ ,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
 				$auths = preg_split('/\s+\&\s+/', $auths);
