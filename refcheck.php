@@ -64,6 +64,8 @@ $UISTR = array(
     'result_head_ok_fi' => 'Kaikki viittaukset näyttäisivät olevan kunnossa! :)️',
     'result_head_nok_en' => 'Some problems were found (NB: the tool may incorrectly interpret some words followed by colon as citations):',
     'result_head_nok_fi' => 'Joitakin ongelmia löytyi (osa voi johtua työkalun virheellisesti lähdeviitteiksi tulkitsemista sanoista tms.):',
+    'footer_en' => 'Tool made by Juha DOT Kuokkala AT helsinki DOT fi. Source code will be published in Github soonish.',
+    'footer_fi' => 'Tehnyt Juha PISTE Kuokkala ÄT helsinki PISTE fi. Lähdekoodi tulee Githubiin kunhan jaksan laittaa.',
 );
 
 include('refcheck_func.php');
@@ -114,10 +116,11 @@ if ($content != "")
 		}
 		echo "</div>\n";
 	}
-
 }
 
 echo "</div>";
+
+echo "<div class=\"footer\">{$UISTR['footer_'.$lang]}</div>";
 
 ?> 
 

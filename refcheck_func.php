@@ -15,10 +15,10 @@ $ERRSTR = array(
 
 function check_references($input, $lang = 'en') {
 	global $ERRSTR;
-    $cits = array();
-    $posscits = array();
-    $refs = array();
-    $uncited = array();
+    $cits = array();  //  in-text citations (with year and/or page numbers)
+    $posscits = array();  // possible citations (words that look like reference abbreviations etc.)
+    $refs = array();  ** dict: first author / title abbreviation => list of corresponding ref. list items
+    $uncited = array();  // reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
     $in_refs = false;
 
 	foreach ($input as $line) {
@@ -83,7 +83,7 @@ function check_references($input, $lang = 'en') {
 							return (string) $a;
 						}, $matches[1] ), $matches[1] );
 			$posscits = array_merge($posscits, $newposscits);
-			// $posscits = array_unique($posscits);
+			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
 			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ]\S+?(?:\s+(?:et\al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\press|in\preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?:\s*:\s*[0-9]+(?:[,–-]+[0-9]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:\s*:\s*[0-9]+(?:[,–-]+[0-9]+)*|(?:\s*:\s*|\s*s\.\s*v\.\s*){1,2}[A-῾*-]+(?:[,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
@@ -104,11 +104,11 @@ function check_references($input, $lang = 'en') {
 				if (!empty($years)) {
 					foreach ($years as $year) {
 						$cits[] = array($auths, $year);
-						//echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
+						#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 					}
 				} else {
 					$cits[] = array($auths, null);
-					//echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
+					#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 				}
 			}
 		}			
@@ -167,6 +167,7 @@ function check_references($input, $lang = 'en') {
 			}
 		}
 	}
+	// Compact sequences of identical lines into one
 	foreach ($uncited as [$auths, $year]) {
 		if (!$year && count($auths) == 1 && count($auths[0]) == 1) {
 			if (in_array($auths[0][0], $posscits)) {
@@ -180,6 +181,18 @@ function check_references($input, $lang = 'en') {
 			$auths_j .= ' ' . $year;
 		}
 		$errlist[] = sprintf($ERRSTR['no_citations_for_ref_'.$lang], $auths_j);
+	}
+	$i = 0;
+	while ($i < count($errlist)) {
+		$count = 1;
+		while ($i + 1 < count($errlist) && $errlist[$i + 1] == $errlist[$i]) {
+			array_splice($errlist, $i, 1);
+			$count += 1;
+		}
+		if ($count > 1) {
+			$errlist[$i] .= ' (x ' . $count . ')';
+		}
+		$i += 1;
 	}
 	return $errlist;
 }

@@ -238,7 +238,8 @@ def check_references(input, lang='en'):
     if not refs:
         errlist.append(ERRSTR['reflist_not_found_'+lang])
     else:
-        for auths, year in sorted(cits):
+        cits.sort()
+        for auths, year in cits:
             found = False
             firstauth = auths[0]
             if firstauth[0] in refs:
@@ -280,7 +281,18 @@ def check_references(input, lang='en'):
             if year:
                 auths_j = auths_j + ' ' + year
             errlist.append(ERRSTR['no_citations_for_ref_'+lang] %(auths_j) )
-                
+            
+        # Compact sequences of identical lines into one
+        i = 0
+        while i < len(errlist):
+            count = 1
+            while i + 1 < len(errlist) and errlist[i + 1] == errlist[i]:
+                del errlist[i]
+                count += 1
+            if count > 1:
+                errlist[i] += ' (x %d)' %(count)
+            i += 1
+
     #print('#cits: ', repr(cits)) ### DEBUG
     #print('#refs: ', repr(refs)) ### DEBUG
     #print('#uncited: ', repr(uncited)) ### DEBUG
