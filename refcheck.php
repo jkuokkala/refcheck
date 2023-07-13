@@ -118,7 +118,7 @@ if ($content != "")
 		}
 		echo "</div>\n";
 
-		echo "<form action=\"/\">\n";
+		echo "<br/><form action=\"/\">\n";
 		echo "<button type=\"submit\" class=\"clear-button\">{$UISTR['reset_button_'.$lang]}</button>\n";
 		echo "</form>\n";
 	}

@@ -13,6 +13,16 @@ $ERRSTR = array(
     'no_citations_for_ref_fi' => 'Lähdeluettelon teokseen "%s" ei ole viittauksia',
 );
 
+// Forming of string index into $uncited array (Python version uses ref object (tuple structure) directly)
+function ref_key($ref) {
+	[$auths, $year] = $ref;
+	$auths_j = implode(' & ', array_column($auths, 0));
+	if ($year) {
+		$auths_j .= ' ' . $year;
+	}
+	return $auths_j;
+}
+
 function check_references($input, $lang = 'en') {
 	global $ERRSTR;
     $cits = array();  //  in-text citations (with year and/or page numbers)
@@ -34,9 +44,9 @@ function check_references($input, $lang = 'en') {
 				$year = $matches[2];
 				if ($auths) {
 					$auths = preg_replace('/\s+\([^)]+\)/', '', $auths);
-					$auths = preg_split('/\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?)/', $auths);
+					$auths = preg_split('/\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?)/u', $auths);
 					$auths = array_map(function($a) {
-						return preg_split('/,\s*/', $a);
+						return preg_split('/,\s*/', $a, 2);
 					}, $auths);
 				}
 				if ($year) {
@@ -44,7 +54,7 @@ function check_references($input, $lang = 'en') {
 				}
 				$refitem = array($auths, $year);
 				$refs[$auths[0][0]][] = $refitem;
-				$uncited[(string)$refitem] = $refitem;
+				$uncited[ref_key($refitem)] = $refitem;
                 //echo(sprintf('#ADD_REF: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 			}
 			else {
@@ -70,7 +80,7 @@ function check_references($input, $lang = 'en') {
 						}
 						$refitem = array($auths, $year);
 						$refs[$auths[0][0]][] = $refitem;
-						$uncited[(string)$refitem] = $refitem;
+						$uncited[ref_key($refitem)] = $refitem;
 						//echo(sprintf('#ADD_REF: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 					}
 				}
@@ -86,14 +96,14 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ]\S+?(?:\s+(?:et\al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\press|in\preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?:\s*:\s*[0-9]+(?:[,–-]+[0-9]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:\s*:\s*[0-9]+(?:[,–-]+[0-9]+)*|(?:\s*:\s*|\s*s\.\s*v\.\s*){1,2}[A-῾*-]+(?:[,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ]\S+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ]\S+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?:\s*:\s*[0-9]+(?:[ ,–-]+[0-9]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:\s*:\s*[0-9]+(?:[ ,–-]+[0-9]+)*|(?:\s*:\s*|\s*s\.\s*v\.\s*){1,2}[A-῾*-]+(?:[ ,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
 				$auths = preg_split('/\s+\&\s+/', $auths);
 				foreach ($auths as $i => $auth) {
-					if (preg_match('/^((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)/', $auth, $m)) {
+					if (preg_match('/^((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)/u', $auth, $m)) {
 						$auths[$i] = array($m[2], trim($m[1]));
-					} elseif (preg_match('/\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/', $auth)) {
+					} elseif (preg_match('/\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth)) {
 						$auths[$i] = preg_split('/\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth);
 					} else {
 						$auths[$i] = array($auth);
@@ -114,13 +124,14 @@ function check_references($input, $lang = 'en') {
 		}			
 	}
 
+    echo "<br/>\n<b>#uncited (init.):</b> ", var_dump($uncited); ### DEBUG
 	// $uncited = array_unique($uncited);
 	$errlist = [];
 	if (empty($refs)) {
 		$errlist[] = $ERRSTR['reflist_not_found_'.$lang];
 	} else {
 		//sort($cits, SORT_STRING);
-		usort($cits, function($a, $b) { return [$a[0][0][0], $a[1]] <=> [$b[0][0][0], $b[1]]; });
+		usort($cits, function($a, $b) { return ref_key($a) <=> ref_key($b); });
 		foreach ($cits as [$auths, $year]) {
 			$found = false;
 			$firstauth = $auths[0];
@@ -129,7 +140,7 @@ function check_references($input, $lang = 'en') {
 					foreach ($refs[$firstauth[0]] as $ref) {
 						if (count($ref[0]) > 1 && $ref[1] == $year) {
 							$found = true;
-							unset($uncited[array_search($ref, $uncited)]);
+							unset($uncited[ref_key($ref)]);
 							break;
 						}
 					}
@@ -139,7 +150,7 @@ function check_references($input, $lang = 'en') {
 						$refauth = $ref[0][0];
 						if (count($refauth) > 1 && strpos($refauth[1], $gname_pref) === 0 && $ref[1] == $year) {
 							$found = true;
-							unset($uncited[array_search($ref, $uncited)]);
+							unset($uncited[ref_key($ref)]);
 							break;
 						}
 					}
@@ -149,7 +160,7 @@ function check_references($input, $lang = 'en') {
 						$refauths_fam = array_column($ref[0], 0);
 						if ($refauths_fam == $auths_fam && $ref[1] == $year) {
 							$found = true;
-							unset($uncited[array_search($ref, $uncited)]);
+							unset($uncited[ref_key($ref)]);
 							break;
 						}
 					}
@@ -167,7 +178,6 @@ function check_references($input, $lang = 'en') {
 			}
 		}
 	}
-	// Compact sequences of identical lines into one
 	foreach ($uncited as [$auths, $year]) {
 		if (!$year && count($auths) == 1 && count($auths[0]) == 1) {
 			if (in_array($auths[0][0], $posscits)) {
@@ -182,6 +192,7 @@ function check_references($input, $lang = 'en') {
 		}
 		$errlist[] = sprintf($ERRSTR['no_citations_for_ref_'.$lang], $auths_j);
 	}
+	// Compact sequences of identical lines into one
 	$i = 0;
 	while ($i < count($errlist)) {
 		$count = 1;
@@ -194,6 +205,11 @@ function check_references($input, $lang = 'en') {
 		}
 		$i += 1;
 	}
+    #echo "<br/>\n<b>#cits:</b> "; var_dump($cits); ### DEBUG
+    #echo "<br/>\n<b>#refs:</b> ", var_dump($refs); ### DEBUG
+    #echo "<br/>\n<b>#uncited:</b> ", var_dump($uncited); ### DEBUG
+    #echo "<br/>\n<b>#posscits:</b> "; var_dump($posscits); ### DEBUG
+
 	return $errlist;
 }
 
