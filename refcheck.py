@@ -115,7 +115,7 @@ def check_references(input, lang='en'):
                     m = re.match(r'\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)', m.group(1))
                     if m:
                         auths = m.group(1)
-                        year = None
+                        year = ''
                         m = re.search(r'\s+([12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\))$', auths)
                         if m:
                             year = m.group(1)
@@ -230,16 +230,15 @@ def check_references(input, lang='en'):
                         cits.append( (auths, year) )
                         #print('#ADD: ', repr(auths), repr(year)) ### DEBUG
                 else:
-                    cits.append( (auths, None) )
-                    #print('#ADD: ', repr(auths), None) ### DEBUG
+                    cits.append( (auths, '') )
+                    #print('#ADD: ', repr(auths), '') ### DEBUG
                 
     errlist = []
     
     if not refs:
         errlist.append(ERRSTR['reflist_not_found_'+lang])
     else:
-        cits.sort()
-        for auths, year in cits:
+        for auths, year in sorted(cits):
             found = False
             firstauth = auths[0]
             if firstauth[0] in refs:

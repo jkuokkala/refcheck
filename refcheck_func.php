@@ -53,7 +53,7 @@ function check_references($input, $lang = 'en') {
 					$m = preg_match('/^\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)/', $matches[1], $matches);
 					if ($m) {
 						$auths = $matches[1];
-						$year = null;
+						$year = '';
 						$m = preg_match('/\s+([12][0-9]{3}(?:[–-][0-9]+)?[a-z]?|\([^)]+\))$/', $auths, $matches);
 						if ($m) {
 							$year = $matches[1];
@@ -107,7 +107,7 @@ function check_references($input, $lang = 'en') {
 						#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 					}
 				} else {
-					$cits[] = array($auths, null);
+					$cits[] = array($auths, '');
 					#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 				}
 			}
