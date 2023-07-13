@@ -60,6 +60,8 @@ $UISTR = array(
     'add_input_heading_fi' => 'Tähän voi kopioida alaviitteet ja muut erilliset lähdeviitteitä sisältävät tekstinosat:',
     'submit_button_en' => 'Check Citations against References List',
     'submit_button_fi' => 'Tarkasta lähdeviitteiden ja -luettelon yhtäpitävyys',
+    'reset_button_en' => 'Clear form fields',
+    'reset_button_fi' => 'Tyhjennä lomakkeen tiedot',
     'result_head_ok_en' => 'All references seem to be OK! :)️',
     'result_head_ok_fi' => 'Kaikki viittaukset näyttäisivät olevan kunnossa! :)️',
     'result_head_nok_en' => 'Some problems were found (NB: the tool may incorrectly interpret some words followed by colon as citations):',
@@ -86,14 +88,14 @@ echo "</div>\n";
 
 echo "<h2  class=\"cop-blue-text cop-section-title cop-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
-echo "<hr>\n";
+echo "<hr/>\n";
 
 echo "<div class=\"ref-form\">\n";
 echo "<div class=\"input-heading\">{$UISTR['input_heading_'.$lang]}</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
 echo "<div class=\"input-heading\">{$UISTR['add_input_heading_'.$lang]}</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
 echo "<button type=\"submit\" class=\"cop-button cop-button-wide\">{$UISTR['submit_button_'.$lang]}</button>\n";
 echo "</div>\n";
-echo "</form><hr>\n";
+echo "</form><hr/>\n";
 
 if ($content != "")
 {
@@ -105,16 +107,20 @@ if ($content != "")
 	
 	if (empty($output))
 	{
-		echo "<div id=\"res\" class=\"result-head-ok\">{$UISTR['result_head_ok_'.$lang]}</div>\n<hr>\n";
+		echo "<div id=\"res\" class=\"result-head-ok\">{$UISTR['result_head_ok_'.$lang]}</div>\n<hr/>\n";
 	}
 	else
 	{
-		echo "<div id=\"res\" class=\"result-head-nok\">{$UISTR['result_head_nok_'.$lang]}</div>\n<hr>\n";
+		echo "<div id=\"res\" class=\"result-head-nok\">{$UISTR['result_head_nok_'.$lang]}</div>\n<hr/>\n";
 		echo "<div class=\"trans\">\n";
 		foreach ($output as $outline) {
 			echo "<div>$outline</div>\n";
 		}
 		echo "</div>\n";
+
+		echo "<form action=\"/\">\n";
+		echo "<button type=\"submit\" class=\"clear-button\">{$UISTR['reset_button_'.$lang]}</button>\n";
+		echo "</form>\n";
 	}
 }
 
@@ -122,7 +128,7 @@ echo "</div>";
 
 echo "<div class=\"footer\">{$UISTR['footer_'.$lang]}</div>";
 
-?> 
+?>
 
 
 </body>

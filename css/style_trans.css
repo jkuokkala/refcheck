@@ -125,6 +125,9 @@ div.trans {
 	background-color: #A5DAFA;
 	color: white;
 }
+.cop-button:focus {
+	outline:5px auto -webkit-focus-ring-color;outline-offset:-2px
+}
 
 .cop-blue-text {	color: #120D9A; }
 .cop-section-title {
@@ -147,8 +150,27 @@ div.trans {
 .bigbutton:hover,
 .bigbutton:active,
 .bigbutton:focus {
-	background-color: #A5DAFA;
+	background-color: #87ccf7;
 	color: white;
+}
+
+.clear-button {
+	background-color: #918ED9;
+	border: none;
+	color: white;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 1.0rem;	
+	padding: 12px 32px;
+}
+.clear-button:hover,
+.clear-button:active,
+.clear-button:focus {
+	background-color: #87ccf7;
+	color: white;
+}
+.clear-button:focus {
+	outline:5px auto -webkit-focus-ring-color;outline-offset:-2px
 }
 
 .lang-select {

@@ -17,7 +17,7 @@ function check_references($input, $lang = 'en') {
 	global $ERRSTR;
     $cits = array();  //  in-text citations (with year and/or page numbers)
     $posscits = array();  // possible citations (words that look like reference abbreviations etc.)
-    $refs = array();  ** dict: first author / title abbreviation => list of corresponding ref. list items
+    $refs = array();  // dict: first author / title abbreviation => list of corresponding ref. list items
     $uncited = array();  // reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
     $in_refs = false;
 
