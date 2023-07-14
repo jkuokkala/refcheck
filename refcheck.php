@@ -25,7 +25,7 @@ if (isset($_POST["addcontent"])) {
 }
 ?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
-<!-- Version 0.1, 2023-07-10 -->
+<!-- Version 1.0, 2023-07-13 -->
 <!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
 <!-- Interface PHP & CSS worked out on the base of Copius code, https://www.copius.eu/ortho.php -->
 
@@ -64,8 +64,8 @@ $UISTR = array(
     'reset_button_fi' => 'Tyhjennä lomakkeen tiedot',
     'result_head_ok_en' => 'All references seem to be OK! :)️',
     'result_head_ok_fi' => 'Kaikki viittaukset näyttäisivät olevan kunnossa! :)️',
-    'result_head_nok_en' => 'Some problems were found (NB: the tool may incorrectly interpret some words followed by colon as citations):',
-    'result_head_nok_fi' => 'Joitakin ongelmia löytyi (osa voi johtua työkalun virheellisesti lähdeviitteiksi tulkitsemista sanoista tms.):',
+    'result_head_nok_en' => 'Some problems were found (NB: the tool may not recognize references in more special formats; check also the punctuation of References list):',
+    'result_head_nok_fi' => 'Joitakin ongelmia löytyi (työkalu ei ehkä tunnista erikoisemman muotoisia viitteitä; tarkista myös lähdeluettelon välimerkitys):',
     'footer_en' => 'Tool made by Juha DOT Kuokkala AT helsinki DOT fi. Source code will be published in Github soonish.',
     'footer_fi' => 'Tehnyt Juha PISTE Kuokkala ÄT helsinki PISTE fi. Lähdekoodi tulee Githubiin kunhan jaksan laittaa.',
 );

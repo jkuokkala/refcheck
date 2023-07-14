@@ -1,5 +1,5 @@
 <!-- refcheck - References list and citations cross-checking utility -->
-<!-- Version 0.1, 2023-07-10 (converted from the original Python version to PHP) -->
+<!-- Version 1.0, 2023-07-13 (converted from the original Python version to PHP) -->
 <!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
 
 
@@ -32,7 +32,7 @@ function check_references($input, $lang = 'en') {
     $in_refs = false;
 
 	foreach ($input as $line) {
-		if (!$in_refs && preg_match('/^(References|Lähteet|Kirjallisuus|Allikad|Források)\s*$/u', $line)) {
+		if (!$in_refs && preg_match('/^(References|Literature|Lähteet|Kirjallisuus|Allikad|Források)\s*$/u', $line)) {
 			$in_refs = true;
 		} elseif ($in_refs && preg_match('/^(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b/u', $line)) {
 			$in_refs = false;
@@ -96,7 +96,7 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-῾*-]+(?:[ ,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-῾*-]+(?:[ ,–-]+[A-῾*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
 				$auths = preg_split('/\s+\&\s+/', $auths);

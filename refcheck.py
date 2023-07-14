@@ -41,7 +41,7 @@ def check_references(input, lang='en'):
     in_refs = False
 
     for line in input:
-        if not in_refs and re.match(r'(References|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
+        if not in_refs and re.match(r'(References|Literature|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
             in_refs = True
         elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
             in_refs = False
@@ -136,13 +136,17 @@ def check_references(input, lang='en'):
             for citcand in re.findall(r'''
                     \b
                     (
-                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an[Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
                         (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
+                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
                         [A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?                            # Surname / Reference title
                         (?:
                             \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
                         |
-                            (?:\s+\&\s+[A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?)+  # & More & Authors ?
+                            (?:                            # & More & Authors ?
+                                \s+\&\s+
+                                (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?
+                                [A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?
+                            )+
                         )?
                     )
                     (?:['’]s)?   # Author's ?
