@@ -33,7 +33,7 @@ def check_references(input, lang='en'):
     Returns the noted errors in a list of strings or an empty list if no errors were found.
     """
     
-    cits = list()  #  in-text citations (with year and/or page numbers)
+    cits = list()  # in-text citations (with year and/or page numbers) [a set could be used instead of list to store identical citations only once; ]
     posscits = set()  # possible citations (words that look like reference abbreviations etc.)
     refs = defaultdict(list)  # dict key = first author / title abbreviation, value contains a list of corresponding ref. list items
     uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
@@ -138,14 +138,14 @@ def check_references(input, lang='en'):
                     (
                         (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
-                        [A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?                            # Surname / Reference title
+                        [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?                            # Surname / Reference title
                         (?:
                             \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
                         |
                             (?:                            # & More & Authors ?
                                 \s+\&\s+
                                 (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?
-                                [A-ZÅÄÖÜČŠŽ][A-῾\'’-]+?
+                                [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?
                             )+
                         )?
                     )
@@ -203,9 +203,9 @@ def check_references(input, lang='en'):
                             |
                                 :?                  # Colon ?
                                 \s*s\.\s*v\.\s*     # s.v.
-                                [A-῾*-]+            # Word consisting of letters (asterisks or hyphens can be included)
+                                [A-\u1FFE*-]+     # Word consisting of letters (asterisks or hyphens can be included)
                                 (?:
-                                    [ ,–-]+[A-῾*-]+ # More words ?
+                                    [ ,–-]+[A-\u1FFE*-]+ # More words ?
                                 )*
                             )
                             (?:
