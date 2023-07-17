@@ -2,11 +2,11 @@
 Citation / references list cross-checking utility
 
 Cross-checking utility for in-text citations and reference literature list within one document.
-The only citation style currently supported is "Generic Style Rules for Linguistics" 
+Works currently with the "Generic Style Rules for Linguistics" style 
 (https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/).
 
-Quite a rudimentary tool for the time being but pretty handy for finding the most obvious missing references.
-Currently only checks citations with a year for existence in the References list.
+The tool is available in two variants: Python (the primarily developed version) 
+and PHP (for web applications unable to access Python scripts).
 
 ## Usage
 
@@ -14,13 +14,13 @@ Unix:
 
     cat _source.txt | python refcheck.py > _result.txt
 
-Windows:
+Windows (Powershell):
 
     Get-Content _source.txt | python refcheck.py > _result.txt
  
 Input text (stdin) should be first converted into UTF-8 plain text.
 
-## TODO
-- Check citations without a year (as far as possible)
-- Check that all References list items are cited in the document
+## TODO / Development ideas
 
+- Support for additional style sheets
+- Client-side web version implemented with JavaScript?
