@@ -15,7 +15,7 @@ if (isset($_GET['lang'])) {
 if (!in_array($lang, ['en','fi'])) {
 	$lang = "fi";
 }
-setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiretion time 5y
+setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiration time 5y
 
 if (isset($_POST["content"])) {
 	$content = $_POST["content"];
@@ -25,7 +25,7 @@ if (isset($_POST["addcontent"])) {
 }
 ?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
-<!-- Version 1.0, 2023-07-13 -->
+<!-- Version 1.0, 2023-07-18 -->
 <!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
 <!-- Interface PHP & CSS worked out on the base of Copius code, https://www.copius.eu/ortho.php -->
 
@@ -52,8 +52,8 @@ if (isset($_POST["addcontent"])) {
 $UISTR = array(
     'main_heading_en' => 'RefCheck – Cross-checking utility for in-text citations and references list within one document',
     'main_heading_fi' => 'RefCheck – Lähdeviitteiden ja lähdeluettelon ristiintarkastustyökalu',
-    'main_heading_note_en' => 'Currently only supports the <a href=\"https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/\">Generic Style Rules for Linguistics</a> and similar enough stylesheets.',
-    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href=\"https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/\">Generic Style Rules for Linguistics</a> -tyyliä ja muita samaa lähdeviitemuotoilua käyttäviä tyylejä.',
+    'main_heading_note_en' => 'Currently only supports the <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> and similar enough stylesheets.',
+    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> -tyyliä ja muita samaa lähdeviitemuotoilua käyttäviä tyylejä.',
     'input_heading_en' => 'Paste your document text here, including References list:',
     'input_heading_fi' => 'Kopioi tähän dokumenttisi teksti, sisältäen lähdeluettelon:',
     'add_input_heading_en' => 'Footnotes and other additional text with citations can be pasted here:',
@@ -86,14 +86,14 @@ echo "</select>\n";
 echo "</div>\n";
 
 
-echo "<h2  class=\"cop-blue-text cop-section-title cop-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<h2  class=\"refch-blue-text refch-section-title refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
 echo "<hr/>\n";
 
 echo "<div class=\"ref-form\">\n";
 echo "<div class=\"input-heading\">{$UISTR['input_heading_'.$lang]}</div>\n<textarea name=\"content\" width=\"500\" height=\"500\">$content</textarea>\n<br/><br/>\n";
 echo "<div class=\"input-heading\">{$UISTR['add_input_heading_'.$lang]}</div>\n<textarea name=\"addcontent\" width=\"500\" height=\"500\">$addcontent</textarea>\n<br/><br/>\n";
-echo "<button type=\"submit\" class=\"cop-button cop-button-wide\">{$UISTR['submit_button_'.$lang]}</button>\n";
+echo "<button type=\"submit\" class=\"refch-button refch-button-wide\">{$UISTR['submit_button_'.$lang]}</button>\n";
 echo "</div>\n";
 echo "</form><hr/>\n";
 
@@ -129,7 +129,6 @@ echo "</div>";
 echo "<div class=\"footer\">{$UISTR['footer_'.$lang]}</div>";
 
 ?>
-
 
 </body>
 </html>

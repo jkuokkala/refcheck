@@ -1,9 +1,8 @@
-<!-- refcheck - References list and citations cross-checking utility -->
-<!-- Version 1.0, 2023-07-13 (converted from the original Python version to PHP) -->
-<!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
-
-
 <?php
+// refcheck - References list and citations cross-checking utility
+// Version 1.0 (converted from the original Python version to PHP)
+// by Juha Kuokkala, juha.kuokkala ät helsinki.fi, 2023
+
 $ERRSTR = array(
     'reflist_not_found_en' => 'No references list found (abnormally named section heading?)',
     'reflist_not_found_fi' => 'Lähdeluetteloa ei löydy (epätavallisesti nimetty otsikko?)',
@@ -13,7 +12,7 @@ $ERRSTR = array(
     'no_citations_for_ref_fi' => 'Lähdeluettelon teokseen "%s" ei ole viittauksia',
 );
 
-// Forming of string index into $uncited array (Python version uses ref object (tuple structure) directly)
+// Forming of string index into $uncited array (Python version uses ref object (tuple structure) reference directly)
 function ref_key($ref) {
 	[$auths, $year] = $ref;
 	$auths_j = implode(' & ', array_column($auths, 0));
@@ -38,7 +37,8 @@ function check_references($input, $lang = 'en') {
 			$in_refs = false;
 		}
 		if ($in_refs) {
-			preg_match('/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))\./u', $line, $matches, PREG_UNMATCHED_AS_NULL); // (See more readable versions of the regexes in Python version)
+			preg_match('/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))\./u', $line, $matches, PREG_UNMATCHED_AS_NULL);
+			// (See more readable versions of the regexes in Python version)
 			if ($matches) {
 				$auths = $matches[1];
 				$year = $matches[2];
@@ -96,7 +96,8 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER); // (See more readable versions of the regexes in Python version)
+			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			// (See more readable versions of the regexes in Python version)
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
 				$auths = preg_split('/\s+\&\s+/', $auths);
@@ -132,7 +133,6 @@ function check_references($input, $lang = 'en') {
 	if (empty($refs)) {
 		$errlist[] = $ERRSTR['reflist_not_found_'.$lang];
 	} else {
-		//sort($cits, SORT_STRING);
 		usort($cits, function($a, $b) { return ref_key($a) <=> ref_key($b); });
 		foreach ($cits as [$auths, $year]) {
 			$found = false;
@@ -212,6 +212,5 @@ function check_references($input, $lang = 'en') {
 
 	return $errlist;
 }
-
 
 ?>

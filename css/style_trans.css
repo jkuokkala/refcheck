@@ -12,76 +12,10 @@ body {
 	margin: 2rem 12rem;
 }
 
-tr {
-	border-width: 1px;
-	border-spacing: 1px;
-	border-style: outset;
-	border-color: gray;
-	border-collapse: collapse
-}
-
-table {
-	width: 80%;	
-	border-width: 1px;
-	border-spacing: 1px;
-	border-style: outset;
-	border-color: gray;
-	border-collapse: collapse;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-table.transform {
-	border: none;
-}
-
-table.transform tr {
-	border: none;
-}
-
-td, th, img {
-	padding: 5px
-}
-
-td.with_border {
-	border-right: 1px solid;
-}
-
-td.strong_border_right {
-	border-right: 3px solid;
-}
-
-td.strong_border_bottom {
-	border-bottom: 3px solid;
-}
-
-td.strong_border_tl {
-	border-right: 3px solid;	
-	border-bottom: 3px solid;
-}
-
 textarea {
 	width: 100%;
 	height: 100%;
 	position:relative;
-}
-
-table.options {
-	border-width: 1px;
-	border-spacing: 2px;
-	border-style: hidden;
-	border-color: white;
-	border-collapse: collapse
-}
-
-td.options {
-
-	text-align:center;
-	border-width: 1px;
-	padding: 5px;
-	border-style: hidden;
-	border-color: black;
-	-moz-border-radius: ;
 }
 
 div.trans {
@@ -93,8 +27,7 @@ div.trans {
 }
 
 
-
-.cop-section { margin-bottom: 60px; }
+.refch-section { margin-bottom: 60px; }
 
 .form-control {
 	width: 80%;
@@ -107,7 +40,7 @@ div.trans {
 	margin-right: auto;
 }
 
-.cop-button {
+.refch-button {
 	background-color: #120D9A;
 	border: none;
 	color: white;
@@ -117,23 +50,23 @@ div.trans {
 	padding: 18px 35px;
 }
 
-.cop-button-wide { padding: 18px 40px; }
+.refch-button-wide { padding: 18px 40px; }
 
-.cop-button:hover,
-.cop-button:active,
-.cop-button:focus {
+.refch-button:hover,
+.refch-button:active,
+.refch-button:focus {
 	background-color: #605bf1;
 	color: white;
 }
 
-.cop-blue-text {	color: #120D9A; }
-.cop-section-title {
+.refch-blue-text {	color: #120D9A; }
+.refch-section-title {
 	font-size: 1.8rem;
 	text-align: center;
 	margin-top: 4rem;
 }
-.cop-margin-b-45 { margin-bottom: 45px; }
-.cop-margin-b-30 { margin-bottom: 30px; }
+.refch-margin-b-45 { margin-bottom: 45px; }
+.refch-margin-b-30 { margin-bottom: 30px; }
 
 
 .bigbutton {
@@ -166,7 +99,7 @@ div.trans {
 	background-color: #605bf1;
 	color: white;
 }
-.cop-button:focus,
+.refch-button:focus,
 .clear-button:focus {
 	-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #eba5a3;box-shadow:inset 0 1px 1px rgba(0,0,0,.075),0 0 6px #eba5a3;
 }
@@ -213,9 +146,9 @@ div.trans {
 
 @media screen and (max-width: 1200px) {
 	.maincontent { margin: 2rem 8rem; }
-	.cop-section-title { margin-top: 4rem; }
+	.refch-section-title { margin-top: 4rem; }
 }
 @media screen and (max-width: 800px) {
 	.maincontent { margin: 2rem 4rem; }
-	.cop-section-title { margin-top: 2rem; }
+	.refch-section-title { margin-top: 2rem; }
 }

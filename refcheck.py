@@ -33,7 +33,8 @@ def check_references(input, lang='en'):
     Returns the noted errors in a list of strings or an empty list if no errors were found.
     """
     
-    cits = list()  # in-text citations (with year and/or page numbers) [a set could be used instead of list to store identical citations only once; ]
+    cits = list()  # in-text citations (with year and/or page numbers)
+    # (A set could be used instead of list to store identical citations only once; list has been used mainly to prepare for possible reporting of the exact locations of erroneous citations.)
     posscits = set()  # possible citations (words that look like reference abbreviations etc.)
     refs = defaultdict(list)  # dict key = first author / title abbreviation, value contains a list of corresponding ref. list items
     uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
