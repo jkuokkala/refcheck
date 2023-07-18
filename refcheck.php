@@ -13,7 +13,7 @@ if (isset($_GET['lang'])) {
 	$lang = $_COOKIE["lang"];
 }
 if (!in_array($lang, ['en','fi'])) {
-	$lang = "fi";
+	$lang = "en";
 }
 setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiration time 5y
 
