@@ -53,7 +53,7 @@ $UISTR = array(
     'main_heading_en' => 'RefCheck – Cross-checking utility for in-text citations and references list within one document',
     'main_heading_fi' => 'RefCheck – Lähdeviitteiden ja lähdeluettelon ristiintarkastustyökalu',
     'main_heading_note_en' => 'Currently only supports the <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> and similar enough stylesheets.',
-    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> -tyyliä ja muita samaa lähdeviitemuotoilua käyttäviä tyylejä.',
+    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> -tyyliä ja muita samanlaista lähdeviitemuotoilua käyttäviä tyylejä.',
     'input_heading_en' => 'Paste your document text here, including References list:',
     'input_heading_fi' => 'Kopioi tähän dokumenttisi teksti, sisältäen lähdeluettelon:',
     'add_input_heading_en' => 'Footnotes and other additional text with citations can be pasted here:',
@@ -66,8 +66,8 @@ $UISTR = array(
     'result_head_ok_fi' => 'Kaikki viittaukset näyttäisivät olevan kunnossa! :)️',
     'result_head_nok_en' => 'Some problems were found (NB: the tool may not recognize references in more special formats; check also the punctuation of References list):',
     'result_head_nok_fi' => 'Joitakin ongelmia löytyi (työkalu ei ehkä tunnista erikoisemman muotoisia viitteitä; tarkista myös lähdeluettelon välimerkitys):',
-    'footer_en' => 'Tool made by Juha DOT Kuokkala AT helsinki DOT fi. Source code will be published in Github soonish.',
-    'footer_fi' => 'Tehnyt Juha PISTE Kuokkala ÄT helsinki PISTE fi. Lähdekoodi tulee Githubiin kunhan jaksan laittaa.',
+    'footer_en' => '<a href="about.php">About / Open Source</a> -- • -- <a href="privacy.php">Privacy</a>',
+    'footer_fi' => '<a href="about.php">Tietoja / Lähdekoodi</a> -- • -- <a href="privacy.php">Yksityisyys</a>',
 );
 
 include('refcheck_func.php');
@@ -86,7 +86,7 @@ echo "</select>\n";
 echo "</div>\n";
 
 
-echo "<h2  class=\"refch-blue-text refch-section-title refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<h2 class=\"refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
 echo "<hr/>\n";
 

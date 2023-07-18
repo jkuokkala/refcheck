@@ -59,11 +59,17 @@ div.trans {
 	color: white;
 }
 
-.refch-blue-text {	color: #120D9A; }
-.refch-section-title {
+h2 {
+	color: #120D9A;
 	font-size: 1.8rem;
 	text-align: center;
 	margin-top: 4rem;
+}
+h3 {
+	color: #120D9A;
+	font-size: 1.1rem;
+	text-align: center;
+	margin-top: 2rem;
 }
 .refch-margin-b-45 { margin-bottom: 45px; }
 .refch-margin-b-30 { margin-bottom: 30px; }
@@ -110,6 +116,15 @@ div.trans {
 
 .heading-note {
 	font-style: italic;
+}
+
+.body-text {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+.body-text p {
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 
 .ref-form {
