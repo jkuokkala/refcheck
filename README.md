@@ -21,8 +21,9 @@ Windows (Powershell):
  
 Input text (stdin) should be first converted into UTF-8 plain text.
 
-## TODO / Development ideas
+## TODO & Development ideas
 
+- Fix citation author regex patterns to recognize more comprehensive uppercase/lowercase letter ranges
 - Support for additional style sheets
 - Client-side web version implemented with JavaScript?
 
