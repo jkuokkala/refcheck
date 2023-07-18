@@ -1,21 +1,7 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
-
-$lang = "";
-$content = "";
-$addcontent = "";
-
-if (isset($_GET['lang'])) {
-	$lang = $_GET['lang'];
-} elseif (isset($_POST["lang"])) {
-	$lang = $_POST["lang"];
-} elseif (isset($_COOKIE["lang"])) {
-	$lang = $_COOKIE["lang"];
-}
-if (!in_array($lang, ['en','fi'])) {
-	$lang = "en";
-}
-setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiration time 5y
+include('lang_select.php');
+$lang = select_lang();
 
 if (isset($_POST["content"])) {
 	$content = $_POST["content"];
