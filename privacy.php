@@ -30,7 +30,7 @@ setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiration time 5y
     <!-- load stylesheets -->
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="css/bootstrap.min.css">                                      <!-- Bootstrap style -->
-    <link rel="stylesheet" href="css/style_trans.css">                                   <!-- Templatemo style -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>

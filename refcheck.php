@@ -40,7 +40,7 @@ if (isset($_POST["addcontent"])) {
     <!-- load stylesheets -->
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="css/bootstrap.min.css">                                      <!-- Bootstrap style -->
-    <link rel="stylesheet" href="css/style_trans.css">                                   <!-- Templatemo style -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
