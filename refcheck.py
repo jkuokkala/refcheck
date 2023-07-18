@@ -9,6 +9,7 @@
  Input text (stdin) should be first converted into UTF-8 plain text.
 
  Author: juha.kuokkala(at)helsinki.fi (2023)
+ RefCheck is published under a Creative Commons Attribution-ShareAlike 4.0 International License.
 """
 
 import sys, re

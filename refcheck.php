@@ -26,6 +26,7 @@ if (isset($_POST["addcontent"])) {
 ?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
 <!-- Version 1.0 by juha.kuokkala ät helsinki.fi, 2023 -->
+<!--  RefCheck is published under a Creative Commons Attribution-ShareAlike 4.0 International License. -->
 
 <!DOCTYPE html>
 <html>
