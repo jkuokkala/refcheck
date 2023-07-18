@@ -24,3 +24,7 @@ Input text (stdin) should be first converted into UTF-8 plain text.
 
 - Support for additional style sheets
 - Client-side web version implemented with JavaScript?
+
+## Licence
+
+RefCheck is published under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
