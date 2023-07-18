@@ -25,9 +25,7 @@ if (isset($_POST["addcontent"])) {
 }
 ?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
-<!-- Version 1.0, 2023-07-18 -->
-<!-- Juha Kuokkala, juha.kuokkala ät helsinki.fi -->
-<!-- Interface PHP & CSS worked out on the base of Copius code, https://www.copius.eu/ortho.php -->
+<!-- Version 1.0 by juha.kuokkala ät helsinki.fi, 2023 -->
 
 <!DOCTYPE html>
 <html>
@@ -86,7 +84,7 @@ echo "</select>\n";
 echo "</div>\n";
 
 
-echo "<h2 class=\"refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
 echo "<hr/>\n";
 

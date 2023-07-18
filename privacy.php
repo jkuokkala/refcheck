@@ -73,7 +73,7 @@ echo "</select>\n";
 echo "</div>\n";
 
 
-echo "<h2 class=\"refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"body-text\">{$UISTR['body_content_'.$lang]}</div>";
 echo "<div class=\"body-text\">{$UISTR['mainpage_link_'.$lang]}</div>";
 

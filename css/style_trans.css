@@ -1,6 +1,5 @@
 
 body {
-	/* font-family: 'Open Sans', Helvetica, Arial, sans-serif; */
     font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	font-weight: 300;
@@ -18,27 +17,7 @@ textarea {
 	position:relative;
 }
 
-div.trans {
-	display: fixed;
-	min-height: 500px;
-	max-height: 500px;
-	text-align:left;
-	overflow: auto
-}
-
-
 .refch-section { margin-bottom: 60px; }
-
-.form-control {
-	width: 80%;
-	border-color: #0a6697;
-	border-radius: 0;
-	color: #4286ab;
-	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-	font-size: 1.3rem;
-	margin-left: auto;
-	margin-right: auto;
-}
 
 .refch-button {
 	background-color: #120D9A;
@@ -64,30 +43,13 @@ h2 {
 	font-size: 1.8rem;
 	text-align: center;
 	margin-top: 4rem;
+	margin-bottom: 3rem;
 }
 h3 {
 	color: #120D9A;
 	font-size: 1.1rem;
 	text-align: center;
 	margin-top: 2rem;
-}
-.refch-margin-b-45 { margin-bottom: 45px; }
-.refch-margin-b-30 { margin-bottom: 30px; }
-
-
-.bigbutton {
-	background-color: #120D9A;
-	border: none;
-	color: white;
-	cursor: pointer;
-	font-size: 3rem;	
-}
-
-.bigbutton:hover,
-.bigbutton:active,
-.bigbutton:focus {
-	background-color: #87ccf7;
-	color: white;
 }
 
 .clear-button {

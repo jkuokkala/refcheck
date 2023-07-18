@@ -30,7 +30,7 @@ setcookie('lang', $lang, time() + (86400 * 365 * 5), "/"); // expiration time 5y
     <!-- load stylesheets -->
 	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="css/bootstrap.min.css">                                      <!-- Bootstrap style -->
-    <link rel="stylesheet" href="css/style_trans.css">                                   <!-- Templatemo style -->
+    <link rel="stylesheet" href="css/style.css">                                   <!-- Templatemo style -->
 </head>
 
 <body>
@@ -78,7 +78,7 @@ echo "</select>\n";
 echo "</div>\n";
 
 
-echo "<h2 class=\"refch-margin-b-45\">{$UISTR['main_heading_'.$lang]}</h2>\n";
+echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"body-text\">{$UISTR['body_content_'.$lang]}</div>";
 echo "<div class=\"body-text\">{$UISTR['mainpage_link_'.$lang]}</div>";
 
