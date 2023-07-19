@@ -97,7 +97,7 @@ if ($content != "")
 	else
 	{
 		echo "<div id=\"res\" class=\"result-head-nok\">{$UISTR['result_head_nok_'.$lang]}</div>\n<hr/>\n";
-		echo "<div class=\"trans\">\n";
+		echo "<div class=\"result\">\n";
 		foreach ($output as $outline) {
 			echo "<div>$outline</div>\n";
 		}

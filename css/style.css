@@ -112,6 +112,14 @@ h3 {
 	background-color: #ffe8e8;
 	font-weight: 600;
 }
+div.result {
+	display: fixed;
+	min-height: 500px;
+	max-height: 500px;
+	text-align:left;
+	overflow: auto
+}
+
 .footer {
 	color: #808080;
 	font-style: italic;
