@@ -13,6 +13,38 @@ $ERRSTR = array(
     'no_citations_for_ref_fi' => 'Lähdeluettelon teokseen "%s" ei ole viittauksia',
 );
 
+function base_forms($authors) {
+    $authors_base = [];
+    $modified = false;
+    foreach ($authors as $auth) {
+        $family = $auth[0];
+        if (substr($family, -4) == 'ksen') {
+            $fam_b = substr($family, 0, -4) . 's';
+            $modified = true;
+		} elseif (preg_match('/[aeiouyäö](sen|st[aä])$/u', $family)) {
+            $fam_b = preg_replace('/(sen|st[aä])$/u', 'nen', $family);
+            $modified = true;
+        } elseif (substr($family, -4) == 'hden') {
+            $fam_b = substr($family, 0, -4) . 'hti';
+            $modified = true;
+		} elseif (preg_match('/[^aeiouyäö]in$/u', $family)) {
+            $fam_b = substr($family, 0, -2);
+            $modified = true;
+		} elseif (preg_match('/[aeiouyäö]n$/u', $family)) {
+            $fam_b = substr($family, 0, -1);
+            $modified = true;
+		} else {
+            $fam_b = $family;
+            $modified = true;
+		}
+        $authors_base[] = array_merge([$fam_b], array_slice($auth, 1));
+	}
+    if ($modified)
+        return $authors_base;
+    else
+        return [];
+}
+
 // Forming of string index into $uncited array (Python version uses ref object (tuple structure) reference directly)
 function ref_key($ref) {
 	[$auths, $year] = $ref;
@@ -137,37 +169,43 @@ function check_references($input, $lang = 'en') {
 		usort($cits, function($a, $b) { return ref_key($a) <=> ref_key($b); });
 		foreach ($cits as [$auths, $year]) {
 			$found = false;
-			$firstauth = $auths[0];
-			if (array_key_exists($firstauth[0], $refs)) {
-				if (preg_match('/^(et\ al\.?|ym\.?|jt\.?)$/u', $firstauth[count($firstauth)-1])) {
-					foreach ($refs[$firstauth[0]] as $ref) {
-						if (count($ref[0]) > 1 && $ref[1] == $year) {
-							$found = true;
-							unset($uncited[ref_key($ref)]);
-							break;
+            # Test author (list) first as given in text, then "base form" modifications
+            foreach ([$auths, base_forms($auths)] as $auths_v) {
+                if (empty($auths_v))
+                    break;
+				$firstauth = $auths_v[0];
+				if (array_key_exists($firstauth[0], $refs)) {
+					if (preg_match('/^(et\ al\.?|ym\.?|jt\.?)$/u', $firstauth[count($firstauth)-1])) {
+						foreach ($refs[$firstauth[0]] as $ref) {
+							if (count($ref[0]) > 1 && $ref[1] == $year) {
+								$found = true;
+								unset($uncited[ref_key($ref)]);
+								break;
+							}
 						}
-					}
-				} elseif (substr($firstauth[count($firstauth)-1], -1) == '.') {
-					$gname_pref = substr($firstauth[count($firstauth)-1], 0, -1);
-					foreach ($refs[$firstauth[0]] as $ref) {
-						$refauth = $ref[0][0];
-						if (count($refauth) > 1 && strpos($refauth[1], $gname_pref) === 0 && $ref[1] == $year) {
-							$found = true;
-							unset($uncited[ref_key($ref)]);
-							break;
+					} elseif (substr($firstauth[count($firstauth)-1], -1) == '.') {
+						$gname_pref = substr($firstauth[count($firstauth)-1], 0, -1);
+						foreach ($refs[$firstauth[0]] as $ref) {
+							$refauth = $ref[0][0];
+							if (count($refauth) > 1 && strpos($refauth[1], $gname_pref) === 0 && $ref[1] == $year) {
+								$found = true;
+								unset($uncited[ref_key($ref)]);
+								break;
+							}
 						}
-					}
-				} else {
-					$auths_fam = array_column($auths, 0);
-					foreach ($refs[$firstauth[0]] as $ref) {
-						$refauths_fam = array_column($ref[0], 0);
-						if ($refauths_fam == $auths_fam && $ref[1] == $year) {
-							$found = true;
-							unset($uncited[ref_key($ref)]);
-							break;
+					} else {
+						$auths_fam = array_column($auths_v, 0);
+						foreach ($refs[$firstauth[0]] as $ref) {
+							$refauths_fam = array_column($ref[0], 0);
+							if ($refauths_fam == $auths_fam && $ref[1] == $year) {
+								$found = true;
+								unset($uncited[ref_key($ref)]);
+								break;
+							}
 						}
 					}
 				}
+                if ($found) break;
 			}
 			if (! $found) {
 				$auths_j = implode(' & ', array_map(function($names) {

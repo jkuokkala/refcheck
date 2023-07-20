@@ -16,7 +16,7 @@ import sys, re
 from collections import defaultdict
 from argparse import ArgumentParser
 
-# Python 3.7 and newer
+# Use if needed, e.g. under Windows (only Python 3.7 and newer)
 sys.stdin.reconfigure(encoding='utf-8')
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -27,6 +27,40 @@ ERRSTR = dict(reflist_not_found_en = 'ERROR: No references list found (abnormall
               no_citations_for_ref_en = 'References list item "%s" not cited in text',
               no_citations_for_ref_fi = 'Lähdeluettelon teokseen "%s" ei ole viittauksia',
 )
+
+def base_forms(authors):
+    """ Takes a list of [surname (othernames?)] lists, returns a modified list with the surnames in
+    (guessed, possible) base form. e.g. Swedish "Wesséns" -> "Wessén", Finnish "Itkosen" -> "Itkonen".
+    If no modifications would be made, returns an empty list.
+    NB! Only Finnish rules are used for the time being. A separate text language parameter could be useful.
+    """
+    authors_base = list()
+    modified = False
+    for auth in authors:
+        family = auth[0]
+        if family.endswith('ksen'):
+            fam_b = family[:-4] + 's'
+            modified = True
+        elif re.search('[aeiouyäö](sen|st[aä])$', family):
+            fam_b = family[:-3] + 'nen'
+            modified = True
+        elif family.endswith('hden'):
+            fam_b = family[:-4] + 'hti'
+            modified = True
+        elif re.search('[^aeiouyäö]in$', family):
+            fam_b = family[:-2]
+            modified = True
+        elif re.search('[aeiouyäö]n$', family):
+            fam_b = family[:-1]
+            modified = True
+        else:
+            fam_b = family
+            modified = True
+        authors_base.append([fam_b] + auth[1:])
+    if modified:
+        return authors_base
+    else:
+        return []
 
 def check_references(input, lang='en'):
     """ Cross-checks citations and references in the <input> text sequence.
@@ -245,32 +279,37 @@ def check_references(input, lang='en'):
     else:
         for auths, year in sorted(cits):
             found = False
-            firstauth = auths[0]
-            if firstauth[0] in refs:
-                if re.match(r'(et\ al\.?|ym\.?|jt\.?)$', firstauth[-1]):
-                    for ref in refs[firstauth[0]]:
-                        if len(ref[0]) > 1 and ref[1] == year:
-                            found = True
-                            uncited.discard(ref)
-                            break
-                elif firstauth[-1].endswith('.'):
-                    gname_pref = firstauth[-1][:-1]
-                    for ref in refs[firstauth[0]]:
-                        refauth = ref[0][0]
-                        if len(refauth) > 1 and refauth[1].startswith(gname_pref) and ref[1] == year:
-                            found = True
-                            uncited.discard(ref)
-                            break
-                else:
-                    auths_fam = [ a[0] for a in auths ]
-                    for ref in refs[firstauth[0]]:
-                        refauths_fam = [ a[0] for a in ref[0] ]
-                        #print('#auths_fam, year: ', repr(auths_fam), repr(year)) ### DEBUG
-                        #print('#refauths_fam, ref[1]: ', repr(refauths_fam), repr(ref[1])) ### DEBUG
-                        if refauths_fam == auths_fam and ref[1] == year:
-                            found = True
-                            uncited.discard(ref)
-                            break
+            # Test author (list) first as given in text, then "base form" modifications
+            for auths_v in [ auths, base_forms(auths) ]:
+                if not auths_v:
+                    break
+                firstauth = auths_v[0]
+                if firstauth[0] in refs:
+                    if re.match(r'(et\ al\.?|ym\.?|jt\.?)$', firstauth[-1]):
+                        for ref in refs[firstauth[0]]:
+                            if len(ref[0]) > 1 and ref[1] == year:
+                                found = True
+                                uncited.discard(ref)
+                                break
+                    elif firstauth[-1].endswith('.'):
+                        gname_pref = firstauth[-1][:-1]
+                        for ref in refs[firstauth[0]]:
+                            refauth = ref[0][0]
+                            if len(refauth) > 1 and refauth[1].startswith(gname_pref) and ref[1] == year:
+                                found = True
+                                uncited.discard(ref)
+                                break
+                    else:
+                        auths_fam = [ a[0] for a in auths_v ]
+                        for ref in refs[firstauth[0]]:
+                            refauths_fam = [ a[0] for a in ref[0] ]
+                            #print('#auths_fam, year: ', repr(auths_fam), repr(year)) ### DEBUG
+                            #print('#refauths_fam, ref[1]: ', repr(refauths_fam), repr(ref[1])) ### DEBUG
+                            if refauths_fam == auths_fam and ref[1] == year:
+                                found = True
+                                uncited.discard(ref)
+                                break
+                if found: break
             if not found:
                 auths_j = ' & '.join([ ' '.join(names) for names in auths ])
                 if year:
