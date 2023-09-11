@@ -172,7 +172,7 @@ def check_references(input, lang='en'):
             for citcand in re.findall(r'''
                     \b(?<![.-])               # Start at "word boundary", but not immediately after . or -
                     (
-                        (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
+                        (?:[A-ZÅÄÖÜČŠŽ]\.\s*)*                             # Given name initial(s) ?
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
                         [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?                            # Surname / Reference title
                         (?:

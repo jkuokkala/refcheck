@@ -129,7 +129,7 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b(?<![.-])((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b(?<![.-])((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s*)*[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			// (See more readable versions of the regexes in Python version)
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
