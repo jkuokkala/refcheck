@@ -77,7 +77,7 @@ def check_references(input, lang='en'):
     in_refs = False
 
     for line in input:
-        if not in_refs and re.match(r'(References|Literature|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
+        if not in_refs and re.match(r'(References|Literature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
             in_refs = True
         elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
             in_refs = False
@@ -137,7 +137,7 @@ def check_references(input, lang='en'):
                 year = m.group(2)
                 if auths:
                     auths = re.sub(r'\s+\([^)]+\)', '', auths)
-                    auths = re.split(r'\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?)', auths)
+                    auths = re.split(r'\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)', auths)
                     auths = tuple([ tuple(re.split(r',\s*', a, maxsplit=1)) for a in auths ])
                 if year:
                     year = year.strip('()')
@@ -176,7 +176,7 @@ def check_references(input, lang='en'):
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
                         [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?                            # Surname / Reference title
                         (?:
-                            \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
+                            \s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)   # et al. ?
                         |
                             (?:                            # & More & Authors ?
                                 \s+\&\s+
@@ -257,8 +257,8 @@ def check_references(input, lang='en'):
                     m = re.match(r'((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)', auths[i])
                     if m:
                         auths[i] = [ m.group(2), m.group(1).strip() ]
-                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜĈŠŽ][a-zåäöüčšž]*\.)', auths[i]):
-                        auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)', auths[i])
+                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜĈŠŽ][a-zåäöüčšž]*\.)', auths[i]):
+                        auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)', auths[i])
                     else:
                         auths[i] = [ auths[i] ]
                 years = re.findall(r'(?:^\s*|;\s*|\s*\()([^;:,.()]*\w[^;:,.()]+)', citcand[1])
@@ -285,7 +285,7 @@ def check_references(input, lang='en'):
                     break
                 firstauth = auths_v[0]
                 if firstauth[0] in refs:
-                    if re.match(r'(et\ al\.?|ym\.?|jt\.?)$', firstauth[-1]):
+                    if re.match(r'(et\ al\.?|ym\.?|jt\.?|u\.a\.)$', firstauth[-1]):
                         for ref in refs[firstauth[0]]:
                             if len(ref[0]) > 1 and ref[1] == year:
                                 found = True

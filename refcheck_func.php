@@ -64,7 +64,7 @@ function check_references($input, $lang = 'en') {
     $in_refs = false;
 
 	foreach ($input as $line) {
-		if (!$in_refs && preg_match('/^(References|Literature|Lähteet|Kirjallisuus|Allikad|Források)\s*$/u', $line)) {
+		if (!$in_refs && preg_match('/^(References|Literature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$/u', $line)) {
 			$in_refs = true;
 		} elseif ($in_refs && preg_match('/^(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b/u', $line)) {
 			$in_refs = false;
@@ -77,7 +77,7 @@ function check_references($input, $lang = 'en') {
 				$year = $matches[2];
 				if ($auths) {
 					$auths = preg_replace('/\s+\([^)]+\)/u', '', $auths);
-					$auths = preg_split('/\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?)/u', $auths);
+					$auths = preg_split('/\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)/u', $auths);
 					$auths = array_map(function($a) {
 						return preg_split('/,\s*/', $a, 2);
 					}, $auths);
@@ -129,7 +129,7 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b((?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?(?:[A-ZÅÄÖÜČŠŽ]\.\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?(\s+(?:\(?(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:\s*\(?(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			// (See more readable versions of the regexes in Python version)
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
@@ -137,8 +137,8 @@ function check_references($input, $lang = 'en') {
 				foreach ($auths as $i => $auth) {
 					if (preg_match('/^((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)/u', $auth, $m)) {
 						$auths[$i] = array($m[2], trim($m[1]));
-					} elseif (preg_match('/\s+(?:et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth)) {
-						$auths[$i] = preg_split('/\s+(?=et\s+al\.|ym\.?|jt\.?|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth);
+					} elseif (preg_match('/\s+(?:et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth)) {
+						$auths[$i] = preg_split('/\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)/u', $auth);
 					} else {
 						$auths[$i] = array($auth);
 					}
@@ -175,7 +175,7 @@ function check_references($input, $lang = 'en') {
                     break;
 				$firstauth = $auths_v[0];
 				if (array_key_exists($firstauth[0], $refs)) {
-					if (preg_match('/^(et\ al\.?|ym\.?|jt\.?)$/u', $firstauth[count($firstauth)-1])) {
+					if (preg_match('/^(et\ al\.?|ym\.?|jt\.?|u\.a\.)$/u', $firstauth[count($firstauth)-1])) {
 						foreach ($refs[$firstauth[0]] as $ref) {
 							if (count($ref[0]) > 1 && $ref[1] == $year) {
 								$found = true;
