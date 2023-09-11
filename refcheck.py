@@ -170,7 +170,7 @@ def check_references(input, lang='en'):
             posscits.update( re.findall(r'\b([A-ZÅÄÖÜČŠŽ]\S*[A-ZÅÄÖÜČŠŽ]\S*)\b(?!\s*(?::|s\.\s*\.v|[0-9]{4}))', line) )
             # Find formally clear citations
             for citcand in re.findall(r'''
-                    \b
+                    \b(?<![.-])               # Start at "word boundary", but not immediately after . or -
                     (
                         (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
                         (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
