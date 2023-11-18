@@ -173,14 +173,14 @@ def check_references(input, lang='en'):
                     \b
                     (
                         (?:[A-ZÅÄÖÜČŠŽ]\.\s+)?                             # Given name initial ?
-                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)? # De, von etc. ?
+                        (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][a]n)\s+)? # De, von etc. ?
                         [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?                            # Surname / Reference title
                         (?:
                             \s+(?:et\ al\.?|ym\.?|jt\.?)   # et al. ?
                         |
                             (?:                            # & More & Authors ?
                                 \s+\&\s+
-                                (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?
+                                (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][a]n)\s+)?
                                 [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?
                             )+
                         )?
