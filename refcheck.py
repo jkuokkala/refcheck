@@ -77,7 +77,7 @@ def check_references(input, lang='en'):
     in_refs = False
 
     for line in input:
-        if not in_refs and re.match(r'(References|Literature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
+        if not in_refs and re.match(r'(References|Litt?erature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
             in_refs = True
         elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
             in_refs = False
@@ -186,10 +186,10 @@ def check_references(input, lang='en'):
                         )?
                     )
                     (?:['’]s)?   # Author's ?
+                    \s*\(?
+                    (?:(?:e\.g\.|esim\.|mm\.)\s+)?
                     (
-                        \s+
                         (?:
-                            \(?
                             (?:
                                 [12][0-9]{3}        # Year
                                 (?:
@@ -228,7 +228,6 @@ def check_references(input, lang='en'):
                         )+
                     |
                         (?:
-                            \s*\(?
                             (?:[0-9]{1,2}|[IVX]+)?  # reference work volume number ?
                             (?:
                                 :\s*                # Colon
