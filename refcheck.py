@@ -77,7 +77,7 @@ def check_references(input, lang='en'):
     in_refs = False
 
     for line in input:
-        if not in_refs and re.match(r'(References|Litt?erature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$', line):
+        if not in_refs and re.match(r'(References|Litt?erature?|Lähteet|Aineistolähteet|Lähdeluettelo|Kirjallisuus|Allikad|Források|Quellen|Primärquellen)\s*$', line):
             in_refs = True
         elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
             in_refs = False
@@ -180,7 +180,7 @@ def check_references(input, lang='en'):
                         |
                             (?:                            # & More & Authors ?
                                 \s+\&\s+
-                                (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?
+                                (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][a]n)\s+)?
                                 [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?
                             )+
                         )?

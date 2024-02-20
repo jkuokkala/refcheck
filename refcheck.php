@@ -3,6 +3,8 @@ header("Content-type: text/html; charset=utf-8");
 include('lang_select.php');
 $lang = select_lang();
 
+$content = "";
+$addcontent = "";
 if (isset($_POST["content"])) {
 	$content = $_POST["content"];
 }
