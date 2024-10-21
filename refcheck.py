@@ -55,6 +55,22 @@ def base_forms(authors):
             modified = True
         else:
             fam_b = family
+        authors_base.append([fam_b] + auth[1:])
+    if modified:
+        return authors_base
+    else:
+        return []
+
+def unprefixed_forms(authors):
+    """ Takes a list of [surname (othernames?)] lists, returns a modified list with the surnames in
+    a form stripped of apparent prefixes ("de", "von" etc.).
+    """
+    authors_base = list()
+    modified = False
+    for auth in authors:
+        family = auth[0]
+        fam_b = re.sub(r'([Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+', '', family)
+        if fam_b != family:
             modified = True
         authors_base.append([fam_b] + auth[1:])
     if modified:
@@ -279,9 +295,9 @@ def check_references(input, lang='en'):
         for auths, year in sorted(cits):
             found = False
             # Test author (list) first as given in text, then "base form" modifications
-            for auths_v in [ auths, base_forms(auths) ]:
+            for auths_v in [ auths, base_forms(auths), unprefixed_forms(auths) ]:
                 if not auths_v:
-                    break
+                    continue
                 firstauth = auths_v[0]
                 if firstauth[0] in refs:
                     if re.match(r'(et\ al\.?|ym\.?|jt\.?|u\.a\.)$', firstauth[-1]):

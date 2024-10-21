@@ -35,8 +35,23 @@ function base_forms($authors) {
             $modified = true;
 		} else {
             $fam_b = $family;
-            $modified = true;
 		}
+        $authors_base[] = array_merge([$fam_b], array_slice($auth, 1));
+	}
+    if ($modified)
+        return $authors_base;
+    else
+        return [];
+}
+
+function unprefixed_forms($authors) {
+    $authors_base = [];
+    $modified = false;
+    foreach ($authors as $auth) {
+        $family = $auth[0];
+        $fam_b = preg_replace('/([Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+/u', '', $family);
+        if ($fam_b != $family)
+            $modified = true;
         $authors_base[] = array_merge([$fam_b], array_slice($auth, 1));
 	}
     if ($modified)
@@ -170,9 +185,9 @@ function check_references($input, $lang = 'en') {
 		foreach ($cits as [$auths, $year]) {
 			$found = false;
             # Test author (list) first as given in text, then "base form" modifications
-            foreach ([$auths, base_forms($auths)] as $auths_v) {
+            foreach ([$auths, base_forms($auths), unprefixed_forms($auths)] as $auths_v) {
                 if (empty($auths_v))
-                    break;
+                    continue;
 				$firstauth = $auths_v[0];
 				if (array_key_exists($firstauth[0], $refs)) {
 					if (preg_match('/^(et\ al\.?|ym\.?|jt\.?|u\.a\.)$/u', $firstauth[count($firstauth)-1])) {
