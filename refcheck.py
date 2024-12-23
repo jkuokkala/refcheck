@@ -93,9 +93,9 @@ def check_references(input, lang='en'):
     in_refs = False
 
     for line in input:
-        if not in_refs and re.match(r'(References|Litt?erature?|Lähteet|Aineistolähteet|Lähdeluettelo|Kirjallisuus|Allikad|Források|Quellen|Primärquellen)\s*$', line):
+        if not in_refs and re.match(r'(References|Litt?erature?|Lähteet|Aineistolähteet|Lähdeluettelo|Kirjallisuus|Allikad|Viitei?d|(Viidatud\s+)?Kirjandus|Hivatkozások|Források|Quellen|Primärquellen)\s*$', line, flags=re.IGNORECASE):
             in_refs = True
-        elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line):
+        elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line, flags=re.IGNORECASE):
             in_refs = False
         if in_refs:
             m = re.match(r'''

@@ -79,9 +79,9 @@ function check_references($input, $lang = 'en') {
     $in_refs = false;
 
 	foreach ($input as $line) {
-		if (!$in_refs && preg_match('/^(References|Litt?erature?|Lähteet|Kirjallisuus|Allikad|Források)\s*$/u', $line)) {
+		if (!$in_refs && preg_match('/^(References|Litt?erature?|Lähteet|Aineistolähteet|Lähdeluettelo|Kirjallisuus|Allikad|Viitei?d|(Viidatud\s+)?Kirjandus|Hivatkozások|Források|Quellen|Primärquellen)\s*$/ui', $line)) {
 			$in_refs = true;
-		} elseif ($in_refs && preg_match('/^(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b/u', $line)) {
+		} elseif ($in_refs && preg_match('/^(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b/ui', $line)) {
 			$in_refs = false;
 		}
 		if ($in_refs) {
