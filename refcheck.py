@@ -91,6 +91,7 @@ def check_references(input, opts, lang='en'):
     uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
 
     authorsep = r'–' if opts.dashauthors else r'\&'
+    authorsep_pr = authorsep.replace('\\', '')
     namepref = r'' if opts.nodotaftername else r'\.'
     yearpref = r':' if opts.colonafteryear else r'\.'
     reflist_regex = r'''
@@ -330,7 +331,7 @@ def check_references(input, opts, lang='en'):
                                 break
                 if found: break
             if not found:
-                auths_j = (' '+ authorsep +' ').join([ ' '.join(names) for names in auths ])
+                auths_j = (' '+ authorsep_pr +' ').join([ ' '.join(names) for names in auths ])
                 if year:
                     auths_j = auths_j + ' ' + year
                 errlist.append(ERRSTR['citation_missing_in_reflist_'+lang] %(auths_j) )
@@ -339,7 +340,7 @@ def check_references(input, opts, lang='en'):
             if not year and len(auths) == 1 and len(auths[0]) == 1:
                 if auths[0][0] in posscits:
                     continue
-            auths_j = (' '+ authorsep +' ').join([ names[0] for names in auths ])
+            auths_j = (' '+ authorsep_pr +' ').join([ names[0] for names in auths ])
             if year:
                 auths_j = auths_j + ' ' + year
             errlist.append(ERRSTR['no_citations_for_ref_'+lang] %(auths_j) )

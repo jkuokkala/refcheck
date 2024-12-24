@@ -77,6 +77,7 @@ function check_references($input, $opts, $lang = 'en') {
     $refs = array();  // dict: first author / title abbreviation => list of corresponding ref. list items
     $uncited = array();  // reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
     $authorsep = $opts['dashauthors'] ? '–' : '\&';
+    $authorsep_pr = str_replace('\\', '', $authorsep);
     $namepref = $opts['nodotaftername'] ? '' : '\.';
     $yearpref = $opts['colonafteryear'] ? ':' : '\.';
     $reflist_regex = '/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+'.$authorsep.'\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)'.$namepref.'\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))'.$yearpref.'/u';
@@ -227,7 +228,7 @@ function check_references($input, $opts, $lang = 'en') {
                 if ($found) break;
 			}
 			if (! $found) {
-				$auths_j = implode(' '. $authorsep .' ', array_map(function($names) {
+				$auths_j = implode(' '. $authorsep_pr .' ', array_map(function($names) {
 					return implode(' ', $names);
 				}, $auths));
 				if ($year) {
@@ -244,7 +245,7 @@ function check_references($input, $opts, $lang = 'en') {
 				continue;
 			}
 		}
-		$auths_j = implode(' '. $authorsep .' ', array_column($auths, 0));
+		$auths_j = implode(' '. $authorsep_pr .' ', array_column($auths, 0));
 		if ($year) {
 			$auths_j .= ' ' . $year;
 		}
