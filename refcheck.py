@@ -78,7 +78,7 @@ def unprefixed_forms(authors):
     else:
         return []
 
-def check_references(input, lang='en'):
+def check_references(input, opts, lang='en'):
     """ Cross-checks citations and references in the <input> text sequence.
     
     Returns the noted errors in a list of strings or an empty list if no errors were found.
@@ -90,6 +90,59 @@ def check_references(input, lang='en'):
     refs = defaultdict(list)  # dict key = first author / title abbreviation, value contains a list of corresponding ref. list items
     uncited = set()  # reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
 
+    authorsep = r'–' if opts.dashauthors else r'\&'
+    namepref = r'' if opts.nodotaftername else r'\.'
+    yearpref = r':' if opts.colonafteryear else r'\.'
+    reflist_regex = r'''
+        \s*
+        (
+            (?:
+                (?:[^,.=0-9]+)
+                (?:
+                    ,
+                    (?:
+                        \s+
+                        [^.=0-9]+\b\.?[\])]?
+                    )+
+                )?
+            )
+            (?:
+                \s+''' + authorsep + r'''\s+
+                (?:
+                    (?:[^,.=0-9]+)
+                    (?:
+                        ,
+                        (?:
+                            \s+
+                            [^.=0-9]+\b\.?[\])]?
+                        )+
+                    )?
+                )
+            )*
+        )
+        ''' + namepref + r'''\s*
+        (
+            (?:
+                [12][0-9]{3}
+                (?:
+                    [–-][0-9]+
+                )?
+                [a-z]?
+                (?:
+                    \s+
+                    \[
+                    [12][0-9]{3}
+                    (?:
+                        [–-][0-9]+
+                    )?
+                    \]
+                )?
+            |
+                \([^)]+\)
+            )
+        )
+    ''' + yearpref
+    
     in_refs = False
 
     for line in input:
@@ -98,62 +151,13 @@ def check_references(input, lang='en'):
         elif in_refs and re.match(r'(Appendix|Liite|(Ala|Loppu)viitteet|(Foot|End)notes)\b', line, flags=re.IGNORECASE):
             in_refs = False
         if in_refs:
-            m = re.match(r'''
-                    \s*
-                    (
-                        (?:
-                            (?:[^,.=0-9]+)
-                            (?:
-                                ,
-                                (?:
-                                    \s+
-                                    [^.=0-9]+\b\.?[\])]?
-                                )+
-                            )?
-                        )
-                        (?:
-                            \s+\&\s+
-                            (?:
-                                (?:[^,.=0-9]+)
-                                (?:
-                                    ,
-                                    (?:
-                                        \s+
-                                        [^.=0-9]+\b\.?[\])]?
-                                    )+
-                                )?
-                            )
-                        )*
-                    )
-                    \.\s*
-                    (
-                        (?:
-                            [12][0-9]{3}
-                            (?:
-                                [–-][0-9]+
-                            )?
-                            [a-z]?
-                            (?:
-                                \s+
-                                \[
-                                [12][0-9]{3}
-                                (?:
-                                    [–-][0-9]+
-                                )?
-                                \]
-                            )?
-                        |
-                            \([^)]+\)
-                        )
-                    )
-                    \.
-                    ''', line, flags=re.VERBOSE)
+            m = re.match(reflist_regex, line, flags=re.VERBOSE)
             if m:
                 auths = m.group(1)
                 year = m.group(2)
                 if auths:
                     auths = re.sub(r'\s+\([^)]+\)', '', auths)
-                    auths = re.split(r'\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)', auths)
+                    auths = re.split(r'\s+'+ authorsep +r'\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)', auths)
                     auths = tuple([ tuple(re.split(r',\s*', a, maxsplit=1)) for a in auths ])
                 if year:
                     year = year.strip('()')
@@ -164,7 +168,7 @@ def check_references(input, lang='en'):
             else:
                 m = re.match(r'\s*([^.=]+)\s+=\s+', line)
                 if m:
-                    m = re.match(r'\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)', m.group(1))
+                    m = re.match(r'\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+'+ authorsep +r'\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)', m.group(1))
                     if m:
                         auths = m.group(1)
                         year = ''
@@ -173,7 +177,7 @@ def check_references(input, lang='en'):
                             year = m.group(1)
                             auths = auths[:-(len(year)+1)]
                         if auths:
-                            auths = re.split(r'\s+\&\s+', auths)
+                            auths = re.split(r'\s+'+ authorsep +r'\s+', auths)
                             auths = tuple([ tuple(re.split(r',\s*', a, maxsplit=1)) for a in auths ])
                         if year:
                             year = year.strip('()')
@@ -195,7 +199,7 @@ def check_references(input, lang='en'):
                             \s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)   # et al. ?
                         |
                             (?:                            # & More & Authors ?
-                                \s+\&\s+
+                                \s*'''+ authorsep +r'''\s*
                                 (?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][a]n)\s+)?
                                 [A-ZÅÄÖÜČŠŽ][A-\u1FFE\'’-]+?
                             )+
@@ -267,7 +271,7 @@ def check_references(input, lang='en'):
                 #print('#CITCAND: ', repr(citcand)) ### DEBUG
                 auths = citcand[0]
                 #auths = re.sub(r'[\'’´]s$', '', auths)
-                auths = re.split(r'\s+\&\s+', auths)
+                auths = re.split(r'\s*[\&–]\s*', auths)
                 for i in range(len(auths)):
                     m = re.match(r'((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)', auths[i])
                     if m:
@@ -326,7 +330,7 @@ def check_references(input, lang='en'):
                                 break
                 if found: break
             if not found:
-                auths_j = ' & '.join([ ' '.join(names) for names in auths ])
+                auths_j = (' '+ authorsep +' ').join([ ' '.join(names) for names in auths ])
                 if year:
                     auths_j = auths_j + ' ' + year
                 errlist.append(ERRSTR['citation_missing_in_reflist_'+lang] %(auths_j) )
@@ -335,7 +339,7 @@ def check_references(input, lang='en'):
             if not year and len(auths) == 1 and len(auths[0]) == 1:
                 if auths[0][0] in posscits:
                     continue
-            auths_j = ' & '.join([ names[0] for names in auths ])
+            auths_j = (' '+ authorsep +' ').join([ names[0] for names in auths ])
             if year:
                 auths_j = auths_j + ' ' + year
             errlist.append(ERRSTR['no_citations_for_ref_'+lang] %(auths_j) )
@@ -366,6 +370,13 @@ def main():
                         help="Input file (default: stdin)")
     ap.add_argument('-l', '--language', choices=['en', 'fi'], default='en', 
                         help="Language for the output texts: en = English, fi = Finnish (default: en)")
+    # Format Options for References List:
+    ap.add_argument('-n', '--nodotaftername', action='store_true', 
+                        help="No dot between name and year")
+    ap.add_argument('-c', '--colonafteryear', action='store_true', 
+                        help="Colon after year (instead of dot)")
+    ap.add_argument('-d', '--dashauthors', action='store_true', 
+                        help="Dash (–) between authors (instead of ampersand, &)")
     opts = ap.parse_args()
 
     if opts.input:
@@ -373,7 +384,7 @@ def main():
     else:
         infile = sys.stdin
 
-    errors = check_references(infile, lang=opts.language)
+    errors = check_references(infile, opts, lang=opts.language)
     
     for err in errors:
         print(err)

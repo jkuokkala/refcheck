@@ -129,6 +129,19 @@ div.result {
 	margin-bottom: 1rem;
 }
 
+
+.options {
+	text-align: left;
+	margin-left: 6rem;
+}
+.options summary {
+	cursor: pointer;
+	display: list-item;
+	margin-left: -2rem;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
 @media screen and (max-width: 1200px) {
 	.maincontent { margin: 2rem 8rem; }
 	.refch-section-title { margin-top: 4rem; }

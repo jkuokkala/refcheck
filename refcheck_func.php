@@ -70,13 +70,17 @@ function ref_key($ref) {
 	return $auths_j;
 }
 
-function check_references($input, $lang = 'en') {
+function check_references($input, $opts, $lang = 'en') {
 	global $ERRSTR;
     $cits = array();  // in-text citations (with year and/or page numbers)
     $posscits = array();  // possible citations (words that look like reference abbreviations etc.)
     $refs = array();  // dict: first author / title abbreviation => list of corresponding ref. list items
     $uncited = array();  // reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
-    $in_refs = false;
+    $authorsep = $opts['dashauthors'] ? '–' : '\&';
+    $namepref = $opts['nodotaftername'] ? '' : '\.';
+    $yearpref = $opts['colonafteryear'] ? ':' : '\.';
+    $reflist_regex = '/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+'.$authorsep.'\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)'.$namepref.'\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))'.$yearpref.'/u';
+	$in_refs = false;
 
 	foreach ($input as $line) {
 		if (!$in_refs && preg_match('/^(References|Litt?erature?|Lähteet|Aineistolähteet|Lähdeluettelo|Kirjallisuus|Allikad|Viitei?d|(Viidatud\s+)?Kirjandus|Hivatkozások|Források|Quellen|Primärquellen)\s*$/ui', $line)) {
@@ -85,14 +89,14 @@ function check_references($input, $lang = 'en') {
 			$in_refs = false;
 		}
 		if ($in_refs) {
-			preg_match('/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+\&\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)\.\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))\./u', $line, $matches, PREG_UNMATCHED_AS_NULL);
+			preg_match($reflist_regex, $line, $matches, PREG_UNMATCHED_AS_NULL);
 			// (See more readable versions of the regexes in Python version)
 			if ($matches) {
 				$auths = $matches[1];
 				$year = $matches[2];
 				if ($auths) {
 					$auths = preg_replace('/\s+\([^)]+\)/u', '', $auths);
-					$auths = preg_split('/\s+\&\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)/u', $auths);
+					$auths = preg_split('/\s+'. $authorsep .'\s+|\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.)/u', $auths);
 					$auths = array_map(function($a) {
 						return preg_split('/,\s*/', $a, 2);
 					}, $auths);
@@ -108,7 +112,7 @@ function check_references($input, $lang = 'en') {
 			else {
 				$m = preg_match('/^\s*([^.=]+)\s+=\s+/', $line, $matches);
 				if ($m) {
-					$m = preg_match('/^\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+\&\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)/u', $matches[1], $matches);
+					$m = preg_match('/^\s*((?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?)(?:\s+'. $authorsep .'\s+(?:(?:[^,.=]+)(?:,\s*(?:[^.=]+))?))*)/u', $matches[1], $matches);
 					if ($m) {
 						$auths = $matches[1];
 						$year = '';
@@ -118,7 +122,7 @@ function check_references($input, $lang = 'en') {
 							$auths = substr($auths, 0, -(strlen($year) + 1));
 						}
 						if ($auths) {
-							$auths = preg_split('/\s+\&\s+/', $auths);
+							$auths = preg_split('/\s+'. $authorsep .'\s+/', $auths);
 							$auths = array_map(function($a) {
 								return preg_split('/,\s*/', $a, 2);
 							}, $auths);
@@ -144,11 +148,11 @@ function check_references($input, $lang = 'en') {
 			//$posscits = array_unique($posscits);
             
 			// Find formally clear citations
-			preg_match_all('/\b(?<![.-])((?:[A-ZÅÄÖÜČŠŽ]\.\s*)*(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)|(?:\s+\&\s+(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?\s*\(?(?:(?:e\.g\.|esim\.|mm\.)\s+)?((?:(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
+			preg_match_all('/\b(?<![.-])((?:[A-ZÅÄÖÜČŠŽ]\.\s*)*(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?(?:\s+(?:et\ al\.?|ym\.?|jt\.?|u\.a\.)|(?:\s*'. $authorsep .'\s*(?:(?:[Dd][aei]|[Tt]e|[Vv]an\ [Dd]er|[Vv][ao]n)\s+)?[A-ZÅÄÖÜČŠŽ][A-\x{1FFE}\'’-]+?)+)?)(?:[\'’]s)?\s*\(?(?:(?:e\.g\.|esim\.|mm\.)\s+)?((?:(?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|(?:\(?(?:forthcoming|in\ press|in\ preparation|tulossa|painossa)\)?))(?<=\w|\])(?!\w)(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*)?(?:;\s+)?)+|(?:(?:[0-9]{1,2}|[IVX]+)?(?::\s*[0-9IVXivx]+(?:[ ,–-]+[0-9IVXivx]+)*|:?\s*s\.\s*v\.\s*[A-\x{1FFE}*-]+(?:[ ,–-]+[A-\x{1FFE}*-]+)*)(?:;\s+)?))/u', $line, $citcands, PREG_SET_ORDER);
 			// (See more readable versions of the regexes in Python version)
 			foreach ($citcands as $citcand) {
 				$auths = $citcand[1];
-				$auths = preg_split('/\s+\&\s+/', $auths);
+				$auths = preg_split('/\s*(\&|–)\s*/', $auths);
 				foreach ($auths as $i => $auth) {
 					if (preg_match('/^((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)/u', $auth, $m)) {
 						$auths[$i] = array($m[2], trim($m[1]));
@@ -164,12 +168,12 @@ function check_references($input, $lang = 'en') {
 					foreach ($years as $year) {
                         if (! preg_match('/^[0-9IVX]{1,3}\b/u', $year)) {
 							$cits[] = array($auths, $year);
-							#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
+							//echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 						}
 					}
 				} else {
 					$cits[] = array($auths, '');
-					#echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
+					//echo(sprintf('#ADD_CIT: "%s" "%s"<br>', print_r($auths, true), $year)); ### DEBUG
 				}
 			}
 		}			
@@ -223,7 +227,7 @@ function check_references($input, $lang = 'en') {
                 if ($found) break;
 			}
 			if (! $found) {
-				$auths_j = implode(' & ', array_map(function($names) {
+				$auths_j = implode(' '. $authorsep .' ', array_map(function($names) {
 					return implode(' ', $names);
 				}, $auths));
 				if ($year) {
@@ -240,7 +244,7 @@ function check_references($input, $lang = 'en') {
 				continue;
 			}
 		}
-		$auths_j = implode(' & ', array_column($auths, 0));
+		$auths_j = implode(' '. $authorsep .' ', array_column($auths, 0));
 		if ($year) {
 			$auths_j .= ' ' . $year;
 		}
