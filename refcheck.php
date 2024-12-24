@@ -11,9 +11,19 @@ if (isset($_POST["content"])) {
 if (isset($_POST["addcontent"])) {
 	$addcontent = $_POST["addcontent"];
 }
+$opts = array(
+	'nodotaftername' => '',
+	'colonafteryear' => '',
+	'dashauthors' => '',
+);
+foreach ($opts as $optname => $val) {
+	if (isset($_POST[$optname])) {
+		$opts[$optname] = $_POST[$optname];
+	}
+}
 ?>
 <!-- refcheck - Web interface for RefCheck, References list and citations cross-checking utility -->
-<!-- Version 1.0 by juha.kuokkala ät helsinki.fi, 2023 -->
+<!-- Version 1.1 by juha.kuokkala ät helsinki.fi, 2023-24 -->
 <!--  RefCheck is published under a Creative Commons Attribution-ShareAlike 4.0 International License. -->
 
 <!DOCTYPE html>
@@ -39,8 +49,16 @@ if (isset($_POST["addcontent"])) {
 $UISTR = array(
     'main_heading_en' => 'RefCheck – Cross-checking utility for in-text citations and references list within one document',
     'main_heading_fi' => 'RefCheck – Lähdeviitteiden ja lähdeluettelon ristiintarkastustyökalu',
-    'main_heading_note_en' => 'Currently only supports the <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> and similar enough stylesheets.',
-    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> -tyyliä ja muita samanlaista lähdeviitemuotoilua käyttäviä tyylejä.',
+    'main_heading_note_en' => 'Currently only supports the <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> and similar stylesheets.',
+    'main_heading_note_fi' => 'Tukee toistaiseksi vain <a href="https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/">Generic Style Rules for Linguistics</a> -tyyliä ja muita samankaltaista lähdeviitemuotoilua käyttäviä tyylejä.',
+    'options_heading_en' => 'Format Options for References List',
+    'options_heading_fi' => 'Lähdeluettelon muotoiluasetukset',
+    'opt_nodotaftername_en' => 'No dot between name and year (Author, First 2000 [instead of Author, First. 2000])',
+    'opt_nodotaftername_fi' => 'Ei pistettä nimen ja vuosiluvun välissä (Author, First 2000 [eikä Author, First. 2000])',
+    'opt_colonafteryear_en' => 'Colon after year (instead of dot)',
+    'opt_colonafteryear_fi' => 'Kaksoispiste vuosiluvun jälkeen (pisteen sijaan)',
+    'opt_dashauthors_en' => 'Dash (–) between authors (instead of ampersand, &)',
+    'opt_dashauthors_fi' => 'Ajatusviiva (–) kirjoittajien välissä (&-merkin sijaan)',
     'input_heading_en' => 'Paste your document text here, including References list:',
     'input_heading_fi' => 'Kopioi tähän dokumenttisi teksti, sisältäen lähdeluettelon:',
     'add_input_heading_en' => 'Footnotes and other additional text with citations can be pasted here:',
@@ -72,9 +90,19 @@ echo "<option value=\"fi\"" . ($lang == 'fi' ? " selected" : "") . ">Suomi</opti
 echo "</select>\n";
 echo "</div>\n";
 
-
+function make_checkbox($varname) {
+	global $opts, $UISTR, $lang;
+	echo "<input type=\"checkbox\" id=\"$varname\" name=\"$varname\" value=\"1\"";
+	if ($opts[$varname]) { echo " checked"; }
+	echo "> <label for=\"$varname\">{$UISTR['opt_'.$varname.'_'.$lang]}</label><br/>\n";
+}
 echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
-echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>";
+echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>\n";
+echo "<details class=\"options\"><summary>{$UISTR['options_heading_'.$lang]}</summary>\n";
+make_checkbox("nodotaftername");
+make_checkbox("colonafteryear");
+make_checkbox("dashauthors");
+echo "</details>\n";
 echo "<hr/>\n";
 
 echo "<div class=\"ref-form\">\n";
@@ -89,7 +117,7 @@ if ($content != "")
 	echo "<div class=\"proc-warnings\">\n";
 	$content .= "\nFootnotes\n" . $addcontent;
 	$content = explode("\n", $content);
-	$output = check_references($content, $lang);
+	$output = check_references($content, $opts, $lang);
 	echo "</div>\n";
 	
 	if (empty($output))
