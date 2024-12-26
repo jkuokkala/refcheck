@@ -92,8 +92,8 @@ def check_references(input, opts, lang='en'):
 
     authorsep = r'–' if opts.dashauthors else r'\&'
     authorsep_pr = authorsep.replace('\\', '')
-    namepref = r'' if opts.nodotaftername else r'\.'
-    yearpref = r':' if opts.colonafteryear else r'\.'
+    namesuff = r'' if opts.nodotaftername else r'\.'
+    yearsuff = r':' if opts.colonafteryear else r'\.'
     reflist_regex = r'''
         \s*
         (
@@ -121,7 +121,7 @@ def check_references(input, opts, lang='en'):
                 )
             )*
         )
-        ''' + namepref + r'''\s*
+        ''' + namesuff + r'''\s*
         (
             (?:
                 [12][0-9]{3}
@@ -142,7 +142,7 @@ def check_references(input, opts, lang='en'):
                 \([^)]+\)
             )
         )
-    ''' + yearpref
+    ''' + yearsuff
     
     in_refs = False
 

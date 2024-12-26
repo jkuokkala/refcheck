@@ -78,9 +78,9 @@ function check_references($input, $opts, $lang = 'en') {
     $uncited = array();  // reference list items that have not (yet) been seen cited in the text; initially, contains the same authorlist/year 2-tuples as the refs lists
     $authorsep = $opts['dashauthors'] ? '–' : '\&';
     $authorsep_pr = str_replace('\\', '', $authorsep);
-    $namepref = $opts['nodotaftername'] ? '' : '\.';
-    $yearpref = $opts['colonafteryear'] ? ':' : '\.';
-    $reflist_regex = '/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+'.$authorsep.'\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)'.$namepref.'\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))'.$yearpref.'/u';
+    $namesuff = $opts['nodotaftername'] ? '' : '\.';
+    $yearsuff = $opts['colonafteryear'] ? ':' : '\.';
+    $reflist_regex = '/^\s*((?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?)(?:\s+'.$authorsep.'\s+(?:(?:[^,.=0-9]+)(?:,(?:\s+[^.=0-9]+\b\.?[\])]?)+)?))*)'.$namesuff.'\s*((?:[12][0-9]{3}(?:[–-][0-9]+)?[a-z]?(?:\s+\[[12][0-9]{3}(?:[–-][0-9]+)?\])?|\([^)]+\)))'.$yearsuff.'/u';
 	$in_refs = false;
 
 	foreach ($input as $line) {
