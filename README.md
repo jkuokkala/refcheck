@@ -2,8 +2,8 @@
 Citation / references list cross-checking utility
 
 Cross-checking utility for in-text citations and reference literature list within one document.
-Works currently with the "Generic Style Rules for Linguistics" style 
-(https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/).
+Works currently with the "Generic Style Rules for Linguistics" 
+(https://www.eva.mpg.de/linguistics/past-research-resources/resources/generic-style-rules/) and some similar styles.
 
 The tool is available in two variants: Python (the primarily developed version) 
 and PHP (for web applications unable to access Python scripts).
