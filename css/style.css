@@ -129,7 +129,6 @@ div.result {
 	margin-bottom: 1rem;
 }
 
-
 .options {
 	text-align: left;
 	margin-left: 6rem;
@@ -138,8 +137,15 @@ div.result {
 	cursor: pointer;
 	display: list-item;
 	margin-left: -2rem;
-	margin-top: 6px;
-	margin-bottom: 6px;
+	margin-top: 1rem;
+	margin-bottom: 0.5rem;
+}
+input[type="checkbox"] { 
+    margin-right: 0.5em;
+}
+label.check {
+    display:flex;
+    align-items: baseline;
 }
 
 @media screen and (max-width: 1200px) {

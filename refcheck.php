@@ -92,9 +92,9 @@ echo "</div>\n";
 
 function make_checkbox($varname) {
 	global $opts, $UISTR, $lang;
-	echo "<input type=\"checkbox\" id=\"$varname\" name=\"$varname\" value=\"1\"";
+	echo "<label class=\"check\"><input type=\"checkbox\" name=\"$varname\" value=\"1\"";
 	if ($opts[$varname]) { echo " checked"; }
-	echo "> <label for=\"$varname\">{$UISTR['opt_'.$varname.'_'.$lang]}</label><br/>\n";
+	echo ">{$UISTR['opt_'.$varname.'_'.$lang]}</label>\n";
 }
 echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
 echo "<div class=\"heading-note\">{$UISTR['main_heading_note_'.$lang]}</div>\n";
