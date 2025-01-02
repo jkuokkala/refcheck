@@ -27,15 +27,17 @@ $lang = select_lang();
 $UISTR = array(
     'main_heading_en' => 'RefCheck: Privacy',
     'main_heading_fi' => 'RefCheck: Yksityisyys',
-    'body_content_en' => '<h3>Data protection</h3>'.
-		'<p>Any data sent to the RefCheck service will not be stored but will be wiped from the server memory immediately after forming an analysis report for the user. Note, though, that using the service through an unsecured http connection, your data will be sent through internet in an unencrypted form.</p>'.
-		'<h3>Cookies</h3>'.
+    'body_content1_en' => '<h3>Data protection</h3>'.
+		'<p>Any data sent to the RefCheck service will not be stored but will be wiped from the server memory immediately after forming an analysis report for the user. ',
+	'body_content_httpnote_en' => 'Note, though, that using the service through an unsecured http connection, your data will be sent through internet in an unencrypted form.</p>',
+	'body_content2_en' => '<h3>Cookies</h3>'.
 		' <p>The service uses a single cookie for storing the language setting of the user.'.
 		' Alternatively, the interface language can be chosen by using <b>lang</b> parameter in page address, e.g.'.
 		' <a href="index.php?lang=fi">index.php?lang=fi</a>.</p>',
-    'body_content_fi' => '<h3>Palveluun lähetettyjen tietojen suoja</h3>'.
-		'<p>RefCheck-lomakkeella lähetettyjä tietoja ei tallenneta mitenkään, vaan ne poistuvat palvelimen muistista heti, kun niistä on muodostettu käyttäjälle raportti. Huomaa kuitenkin, että jos/kun käytät palvelua suojaamattomalla http-yhteydellä, tiedot kulkevat avoimessa internetissä salaamattomina.</p>'.
-		'<h3>Evästeet</h3>'.
+    'body_content1_fi' => '<h3>Palveluun lähetettyjen tietojen suoja</h3>'.
+		'<p>RefCheck-lomakkeella lähetettyjä tietoja ei tallenneta mitenkään, vaan ne poistuvat palvelimen muistista heti, kun niistä on muodostettu käyttäjälle raportti. ',
+	'body_content_httpnote_fi' => 'Huomaa kuitenkin, että jos/kun käytät palvelua suojaamattomalla http-yhteydellä, tiedot kulkevat avoimessa internetissä salaamattomina.</p>',
+	'body_content2_fi' => '<h3>Evästeet</h3>'.
 		' <p>Palvelu käyttää evästettä käyttäjän kieliasetuksen tallentamiseen.'.
 		' Vaihtoehtoisesti käyttöliittymän kielen voi valita <b>lang</b>-osoiteparametrilla, esim.'.
 		' <a href="index.php?lang=fi">index.php?lang=fi</a>.</p>',
@@ -61,7 +63,12 @@ echo "</div>\n";
 
 
 echo "<h2>{$UISTR['main_heading_'.$lang]}</h2>\n";
-echo "<div class=\"body-text\">{$UISTR['body_content_'.$lang]}</div>";
+echo "<div class=\"body-text\">{$UISTR['body_content1_'.$lang]}";
+if (empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') {
+	echo "{$UISTR['body_content_httpnote_'.$lang]}";
+}
+echo "</div>";
+echo "<div class=\"body-text\">{$UISTR['body_content2_'.$lang]}</div>";
 echo "<div class=\"body-text\">{$UISTR['mainpage_link_'.$lang]}</div>";
 
 echo "</form><hr/>\n";
