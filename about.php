@@ -46,8 +46,8 @@ $UISTR = array(
 		' Tämä pikku työkalu on syntynyt ensi sijassa omiin tarpeisiini, mutta jos jollain muulla'.
 		' on kiinnostusta osallistua ohjelman jatkokehittelyyn, niin siitä vain.'.
 		' RefCheck on lisensoitu <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Nimeä-JaaSamoin 4.0 Kansainvälinen -lisenssillä</a>.</p>',
-    'mainpage_link_en' => '<a href="refcheck.php">Back to the main RefCheck page</a>',
-    'mainpage_link_fi' => '<a href="refcheck.php">Takaisin RefCheck-pääsivulle</a>',
+    'mainpage_link_en' => '<a href="index.php">Back to the main RefCheck page</a>',
+    'mainpage_link_fi' => '<a href="index.php">Takaisin RefCheck-pääsivulle</a>',
     'footer_en' => '<a href="about.php">About / Open Source</a> -- • -- <a href="privacy.php">Privacy</a>',
     'footer_fi' => '<a href="about.php">Tietoja / Lähdekoodi</a> -- • -- <a href="privacy.php">Yksityisyys</a>',
 );

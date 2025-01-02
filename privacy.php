@@ -32,15 +32,15 @@ $UISTR = array(
 		'<h3>Cookies</h3>'.
 		' <p>The service uses a single cookie for storing the language setting of the user.'.
 		' Alternatively, the interface language can be chosen by using <b>lang</b> parameter in page address, e.g.'.
-		' <a href="refcheck.php?lang=fi">refcheck.php?lang=fi</a>.</p>',
+		' <a href="index.php?lang=fi">index.php?lang=fi</a>.</p>',
     'body_content_fi' => '<h3>Palveluun lähetettyjen tietojen suoja</h3>'.
 		'<p>RefCheck-lomakkeella lähetettyjä tietoja ei tallenneta mitenkään, vaan ne poistuvat palvelimen muistista heti, kun niistä on muodostettu käyttäjälle raportti. Huomaa kuitenkin, että jos/kun käytät palvelua suojaamattomalla http-yhteydellä, tiedot kulkevat avoimessa internetissä salaamattomina.</p>'.
 		'<h3>Evästeet</h3>'.
 		' <p>Palvelu käyttää evästettä käyttäjän kieliasetuksen tallentamiseen.'.
 		' Vaihtoehtoisesti käyttöliittymän kielen voi valita <b>lang</b>-osoiteparametrilla, esim.'.
-		' <a href="refcheck.php?lang=fi">refcheck.php?lang=fi</a>.</p>',
-    'mainpage_link_en' => '<a href="refcheck.php">Back to the main RefCheck page</a>',
-    'mainpage_link_fi' => '<a href="refcheck.php">Takaisin RefCheck-pääsivulle</a>',
+		' <a href="index.php?lang=fi">index.php?lang=fi</a>.</p>',
+    'mainpage_link_en' => '<a href="index.php">Back to the main RefCheck page</a>',
+    'mainpage_link_fi' => '<a href="index.php">Takaisin RefCheck-pääsivulle</a>',
     'footer_en' => '<a href="about.php">About / Open Source</a> -- • -- <a href="privacy.php">Privacy</a>',
     'footer_fi' => '<a href="about.php">Tietoja / Lähdekoodi</a> -- • -- <a href="privacy.php">Yksityisyys</a>',
 );
