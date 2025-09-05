@@ -277,7 +277,7 @@ def check_references(input, opts, lang='en'):
                     m = re.match(r'((?:[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.\s*)+)(.*)', auths[i])
                     if m:
                         auths[i] = [ m.group(2), m.group(1).strip() ]
-                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜĈŠŽ][a-zåäöüčšž]*\.)', auths[i]):
+                    elif re.search(r'\s+(?:et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)', auths[i]):
                         auths[i] = re.split(r'\s+(?=et\s+al\.|ym\.?|jt\.?|u\.a\.|[A-ZÅÄÖÜČŠŽ][a-zåäöüčšž]*\.)', auths[i])
                     else:
                         auths[i] = [ auths[i] ]
