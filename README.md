@@ -7,7 +7,7 @@ Works currently with the "Generic Style Rules for Linguistics"
 
 The tool is available in two variants: Python (the primarily developed version) 
 and PHP (for web applications unable to access Python scripts).
-An experimental site using the PHP variant is available at http://refcheck.free.nf/ .
+An experimental site using the PHP variant is available at https://refcheck.free.nf/ .
 
 ## Usage
 
